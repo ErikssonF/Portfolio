@@ -17,6 +17,17 @@ hr {
   background-color: inherit;
   border-bottom-style: dotted;
   border-bottom-width: 10px;
+
   opacity: 10%;
   width: 10%;
+}
+
+img{
+  border-radius: 100%;
+  border-style: inset;
+  border-color: #2F4F4F;
+}
+img:hover{
+  height: 105%;
+  width: 105%;
 }
