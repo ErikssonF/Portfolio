@@ -1,33 +1,41 @@
-head{
-}
-
-body {
-  background-color: #8FBC8F;
+body{
+  margin: 0;
 }
 
 h1{
   color: #2F4F4F;
+  margin-top: 0px;
 }
 
 h3{
   color: #2F4F4F;
 }
 
-hr {
-  background-color: inherit;
-  border-bottom-style: dotted;
-  border-bottom-width: 10px;
-
-  opacity: 10%;
-  width: 10%;
+.top{
+  background-color:#8FBC8F;
+  margin: 0px;
+  padding-left: 20px;
 }
 
-img{
+.middle{
+  background-color: red;
+  height: 200px;
+  width: 200px;
+
+}
+
+.bottom{
+  background-color: blue;
+  height: 200px;
+  width: 200px;
+
+}
+.pro {
+  text-decoration: underline;
+
+}
+.profilepic{
+  float: right;
+  margin: 50px;
   border-radius: 100%;
-  border-style: inset;
-  border-color: #2F4F4F;
-}
-img:hover{
-  height: 105%;
-  width: 105%;
 }
