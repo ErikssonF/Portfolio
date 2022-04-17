@@ -10,6 +10,9 @@ h1{
   margin-top: 0;
 }
 
+h2{
+  margin:0;
+}
 h3{
   color: #2F4F4F;
 }
@@ -30,7 +33,7 @@ h3{
 
 .bottom{
   background-color: #DCDCDC;
-  margin: 0px;
+  text-
 }
 
 .profilepic{
@@ -47,6 +50,11 @@ h3{
   position: absolute;
   left: 300px;
   bottom: 300px;
+}
+
+#mountain{
+  position: relative;
+  top:5px;
 }
 
 #java-cup{
