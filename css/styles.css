@@ -3,6 +3,7 @@ body{
   font-size: 18px;
   text-align: center;
   margin: 0;
+  text-decoration-color:#2F4F4F;
 }
 
 h1{
@@ -22,7 +23,8 @@ h3{
   position: relative;
   padding-top: 100px;
 }
-
+p{
+  margin:0;
 }
 .pro {
   text-decoration: underline;
@@ -33,7 +35,6 @@ h3{
 
 .bottom{
   background-color: #DCDCDC;
-  text-
 }
 
 .profilepic{
@@ -58,6 +59,11 @@ h3{
 }
 
 #java-cup{
-  width: 25%;
-  height: 25%;
+  width: 15%;
+  height: 15%;
+}
+
+#message{
+  width: 15%;
+  height: 15%;
 }
