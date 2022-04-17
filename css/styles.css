@@ -1,5 +1,5 @@
 body{
-  font-family: monospace;
+  font-family: monospace, Arial, Helvetica;
   font-size: 18px;
   text-align: center;
   margin: 0;
@@ -20,30 +20,23 @@ h3{
   padding-top: 100px;
 }
 
-.middle{
-  background-color: red;
-  height: 200px;
-  width: 200px;
-
-}
-
-.bottom{
-  background-color: blue;
-  height: 200px;
-  width: 200px;
-
 }
 .pro {
   text-decoration: underline;
-
 }
-/*
+.middle{
+  background-color: #DCDCDC;
+}
+
+.bottom{
+  background-color: #DCDCDC;
+  margin: 0px;
+}
+
 .profilepic{
-  position: absolute;
-  margin-right: 500px;
   border-radius: 100%;
   margin-top: 20px;
-}*/
+}
 
 .topcloud{
   position: absolute;
@@ -54,4 +47,9 @@ h3{
   position: absolute;
   left: 300px;
   bottom: 300px;
+}
+
+#java-cup{
+  width: 25%;
+  height: 25%;
 }
