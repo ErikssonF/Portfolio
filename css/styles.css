@@ -1,10 +1,13 @@
 body{
+  font-family: monospace;
+  font-size: 18px;
+  text-align: center;
   margin: 0;
 }
 
 h1{
   color: #2F4F4F;
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 h3{
@@ -13,8 +16,8 @@ h3{
 
 .top{
   background-color:#8FBC8F;
-  margin: 0px;
-  padding-left: 20px;
+  position: relative;
+  padding-top: 100px;
 }
 
 .middle{
@@ -34,8 +37,21 @@ h3{
   text-decoration: underline;
 
 }
+/*
 .profilepic{
-  float: right;
-  margin: 50px;
+  position: absolute;
+  margin-right: 500px;
   border-radius: 100%;
+  margin-top: 20px;
+}*/
+
+.topcloud{
+  position: absolute;
+  right:300px;
+  top: 50px;
+}
+.bottomcloud{
+  position: absolute;
+  left: 300px;
+  bottom: 300px;
 }
