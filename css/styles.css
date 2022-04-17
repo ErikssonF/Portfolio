@@ -2,7 +2,15 @@ head{
 }
 
 body {
-  background-image: radial-gradient( circle farthest-corner at 92.3% 71.5%,  rgba(83,138,214,1) 0%, rgba(134,231,214,1) 90% );
+  background-color: #8FBC8F;
+}
+
+h1{
+  color: #2F4F4F;
+}
+
+h3{
+  color: #2F4F4F;
 }
 
 hr {
