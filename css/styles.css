@@ -9,6 +9,7 @@ body{
 h1{
   color: #2F4F4F;
   margin-top: 0;
+  text-align: center;
 }
 
 h2{
@@ -31,6 +32,7 @@ p{
 }
 .middle{
   background-color: #DCDCDC;
+
 }
 
 .bottom{
@@ -58,15 +60,66 @@ p{
   top:5px;
 }
 
-.skills-images:hover{
-  display: block;
+#springboot{
+  position:relative;
+  top: 39px;
 }
 
-.skills-images{
-  width: 5%;
-  height: 5%;
-}
 #message{
   width: 15%;
   height: 15%;
+}
+
+.skills{
+height: 350px;
+}
+
+.flip-card {
+  display:inline-block;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  width: 80px;
+  height: 80px;
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+}
+
+/* This container is needed to position the front and back side */
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+/* Do an horizontal flip when you move the mouse over the flip box container */
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Position the front and back side */
+.flip-card-front, .flip-card-back {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+}
+
+/* Style the front side (fallback if image is missing) */
+.flip-card-front {
+  position: relative;
+  background-color: inherit;
+  color: black;
+}
+
+/* Style the back side */
+.flip-card-back {
+  position: relative;
+  bottom:55px;
+  color: #2F4F4F;
+  transform: rotateY(180deg);
 }
