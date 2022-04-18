@@ -6,10 +6,24 @@ body{
   text-decoration-color:#2F4F4F;
 }
 
+hr{
+  border-bottom-style: dotted;
+  border-top-style: none;
+  border-left-style: none;
+  border-right-style: none;
+  border-color: #8FBC8F;
+  border-width: 10px;
+  width: 20%;
+  height: 0px;
+  padding:5px;
+  margin-left: auto;
+}
+
 h1{
   color: #2F4F4F;
   margin-top: 0;
   text-align: center;
+
 }
 
 h2{
