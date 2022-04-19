@@ -7,30 +7,41 @@ body{
 }
 
 hr{
-  border-bottom-style: dotted;
-  border-top-style: none;
-  border-left-style: none;
-  border-right-style: none;
-  border-color: #8FBC8F;
-  border-width: 10px;
-  width: 20%;
-  height: 0px;
-  padding:5px;
-  margin-left: auto;
+  margin:150px;
+  visibility: hidden;
 }
 
 h1{
   color: #2F4F4F;
   margin-top: 0;
   text-align: center;
-
 }
 
 h2{
   margin:0;
+  text-align: center;
 }
 h3{
   color: #2F4F4F;
+  margin:50px;
+}
+
+p{
+  margin-bottom: 50px;
+}
+
+.skills{
+  height:300px;
+}
+
+#mountain{
+  position: relative;
+  top:5px;
+}
+
+#message{
+  width: 5%;
+  height: 5%;
 }
 
 .top{
@@ -38,9 +49,7 @@ h3{
   position: relative;
   padding-top: 100px;
 }
-p{
-  margin:0;
-}
+
 .pro {
   text-decoration: underline;
 }
@@ -69,42 +78,20 @@ p{
   bottom: 300px;
 }
 
-#mountain{
-  position: relative;
-  top:5px;
-}
-
-#springboot{
-  position:relative;
-  top: 39px;
-}
-
-#message{
-  width: 15%;
-  height: 15%;
-}
-
-.skills{
-height: 350px;
-}
-
 .flip-card {
+vertical-align: top;
   display:inline-block;
-  position: relative;
-  margin-left: auto;
-  margin-right: auto;
   padding: 10px;
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   perspective: 1000px; /* Remove this if you don't want the 3D effect */
 }
 
 /* This container is needed to position the front and back side */
 .flip-card-inner {
-  position: relative;
   width: 100%;
   height: 100%;
-  text-align: center;
+  text-align: left;
   transition: transform 0.8s;
   transform-style: preserve-3d;
 }
@@ -116,7 +103,6 @@ height: 350px;
 
 /* Position the front and back side */
 .flip-card-front, .flip-card-back {
-  position: relative;
   width: 100%;
   height: 100%;
   -webkit-backface-visibility: hidden; /* Safari */
@@ -125,7 +111,6 @@ height: 350px;
 
 /* Style the front side (fallback if image is missing) */
 .flip-card-front {
-  position: relative;
   background-color: inherit;
   color: black;
 }
@@ -133,7 +118,8 @@ height: 350px;
 /* Style the back side */
 .flip-card-back {
   position: relative;
-  bottom:55px;
+  bottom:120px;
+  margin-top: 0px;
   color: #2F4F4F;
   transform: rotateY(180deg);
 }
