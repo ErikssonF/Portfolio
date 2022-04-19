@@ -79,9 +79,9 @@ p{
 }
 
 .flip-card {
-vertical-align: top;
+  vertical-align: top;
   display:inline-block;
-  padding: 10px;
+  padding-left: 30px;
   width: 120px;
   height: 120px;
   perspective: 1000px; /* Remove this if you don't want the 3D effect */
