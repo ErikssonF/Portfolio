@@ -4,6 +4,8 @@ body{
   text-align: center;
   margin: 0;
   text-decoration-color:#2F4F4F;
+  padding: 0;
+
 }
 
 hr{
@@ -28,6 +30,7 @@ h3{
 p{
   padding-top:10px;
   padding-bottom: 30px;
+  margin:0;
 }
 
 .skills{
@@ -42,6 +45,10 @@ p{
 #message{
   width: 5%;
   height: 5%;
+}
+
+#contactbottom{
+  height:400px;
 }
 
 .top{
