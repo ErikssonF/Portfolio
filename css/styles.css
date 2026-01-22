@@ -1,100 +1,160 @@
-body{
-  font-family: monospace, Arial, Helvetica;
-  font-size: 18px;
-  text-align: center;
+* {
   margin: 0;
-  text-decoration-color:#2F4F4F;
   padding: 0;
-
+  box-sizing: border-box;
 }
 
-hr{
-  width:150px;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
 }
 
-h1{
-  color: #2F4F4F;
+h1 {
+  color: white;
   margin-top: 0;
-  text-align: center;
+  font-size: 3em;
+  font-weight: 700;
+  letter-spacing: -1px;
 }
 
-h2{
-  margin:0;
-  text-align: center;
-}
-h3{
+h2 {
   color: #2F4F4F;
-  margin:50px;
+  margin: 0 0 15px 0;
+  font-size: 1.8em;
+  font-weight: 600;
 }
 
-p{
-  padding-top:10px;
-  padding-bottom: 30px;
-  margin:0;
+p {
+  margin: 0 0 15px 0;
 }
 
-.skills{
-  height:300px;
-}
-
-#mountain{
+.hero {
+  background-color: #8FBC8F;
   position: relative;
-  top:5px;
+  padding: 120px 20px 100px;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow: hidden;
 }
 
-#message{
-  width: 5%;
-  height: 5%;
+.subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.2em;
+  margin-top: 10px;
 }
 
-#contactbottom{
-  height:400px;
+.container {
+  max-width: 1200px;
+  margin: -50px auto 50px;
+  padding: 0 20px;
 }
 
-.top{
-  background-color:#8FBC8F;
-  position: relative;
-  padding-top: 100px;
+.topcloud {
+  position: absolute;
+  right: 15%;
+  top: 30px;
+  opacity: 0.4;
+  animation: float 6s ease-in-out infinite;
 }
 
-.pro {
-  text-decoration: underline;
-}
-.middle{
-  background-color: #DCDCDC;
-
-}
-
-.bottom{
-  background-color: #DCDCDC;
+.bottomcloud {
+  position: absolute;
+  left: 15%;
+  bottom: 100px;
+  opacity: 0.4;
+  animation: float 8s ease-in-out infinite;
 }
 
-.profilepic{
-  border-radius: 100%;
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
   margin-top: 20px;
 }
 
-.topcloud{
-  position: absolute;
-  right:300px;
-  top: 50px;
-}
-.bottomcloud{
-  position: absolute;
-  left: 300px;
-  bottom: 300px;
+.project-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-align: center;
 }
 
+.project-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.project-card.coming-soon {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.project-card.coming-soon:hover {
+  transform: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.project-icon {
+  font-size: 4em;
+  margin-bottom: 20px;
+}
+
+.project-card h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.project-card p {
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 25px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: white;
+  margin-top: 50px;
+}
+
+
+/* Archive old styles - keeping for reference */
 .flip-card {
   vertical-align: top;
   display:inline-block;
   padding-left: 30px;
   width: 120px;
   height: 120px;
-  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+  perspective: 1000px;
 }
 
-/* This container is needed to position the front and back side */
 .flip-card-inner {
   width: 100%;
   height: 100%;
@@ -103,26 +163,22 @@ p{
   transform-style: preserve-3d;
 }
 
-/* Do an horizontal flip when you move the mouse over the flip box container */
 .flip-card:hover .flip-card-inner {
   transform: rotateY(180deg);
 }
 
-/* Position the front and back side */
 .flip-card-front, .flip-card-back {
   width: 100%;
   height: 100%;
-  -webkit-backface-visibility: hidden; /* Safari */
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
-/* Style the front side (fallback if image is missing) */
 .flip-card-front {
   background-color: inherit;
   color: black;
 }
 
-/* Style the back side */
 .flip-card-back {
   position: relative;
   bottom:120px;
@@ -130,3 +186,4 @@ p{
   color: #2F4F4F;
   transform: rotateY(180deg);
 }
+

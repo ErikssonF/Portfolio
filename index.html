@@ -1,122 +1,39 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Fredrik Eriksson</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="icon" href="faviconTest.ico">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Hub</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="faviconTest.ico">
 </head>
-
 <body>
-
-  <div class="top">
-
-    <img class="topcloud" src="images/cloud.png" alt="cloud-img">
-    <h1>Hello!</h1>
-    <p>I'm Fredrik.</p>
-    <img class="bottomcloud" src="images/cloud.png" alt="cloud-img">
-    <img id="mountain" src="images/mountain.png" alt="mountain-img">
-
-  </div>
-
-
-  <div class="middle">
-    <div class="profile">
-      <img class="profilepic" src="fredrik profilbild.jfif" alt="fredrik profilbild">
-      <p>I'm an aspiring fullstack Java developer who's looking for an internship. </p>
-
-      <hr>
-      <div class="skills">
-        <h3>Skills</h3>
-        <p>Hover over the icons below for more information about each skill.</p>
-
-
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <img src="https://cdn-icons-png.flaticon.com/512/5968/5968282.png" alt="java" style="width:80px;height:80px;">
-            </div>
-            <div class="flip-card-back">
-              <h2>Java</h2>
-              <ul>
-                <li>Spring boot</li>
-                <li>Maven</li>
-                <li>Git/Github</li>
-                <li>JUnit</li>
-                <li>Mockito</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <img src="https://cdn-icons-png.flaticon.com/512/5969/5969059.png" alt="docker" style="width:80px;height:80px;">
-            </div>
-            <div class="flip-card-back">
-              <h2>Docker</h2>
-              <ul>
-                <li>Compose</li>
-                <li>Networks</li>
-                <li>Containers</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <img src="https://cdn-icons-png.flaticon.com/512/1199/1199128.png" alt="mysql" style="width:80px;height:80px;">
-            </div>
-            <div class="flip-card-back">
-              <h2>MySQL</h2>
-              <ul>
-                <li>JDBC</li>
-                <li>JPA</li>
-                <li>CRUD</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="flip-card">
-          <div class="flip-card-inner">
-            <div class="flip-card-front">
-              <img src="https://cdn-icons-png.flaticon.com/512/1336/1336692.png" alt="webdev" style="width:80px;height:80px;">
-            </div>
-            <div class="flip-card-back">
-              <h2>Web Dev</h2>
-              <ul>
-                <li>HTML</li>
-                <li>CSS</li>
-                <li>More to come.. :)</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <hr>
-
-    <div class="bottom">
-
-      <div class="contact">
-        <a href=contact.html>
-          <h3>Contact me!</h3>
-        </a>
-        <img id="message" src="https://cdn-icons-png.flaticon.com/512/893/893268.png" alt="message-image">
-
-      </div>
-
-      <br>
-      <hr>
-
-      <a class="footer-link" href="https://www.linkedin.com/in/fredrik-eriksson-91896a184/"> LinkedIn</a>
-      <a class="footer-link" href="https://github.com/erikssonf"> Github</a>
-      <p>© 2022 Fredrik Eriksson</p>
+    <div class="hero">
+        <img class="topcloud" src="images/cloud.png" alt="cloud">
+        <h1>Project Hub</h1>
+        <p class="subtitle">A collaborative space for sharing web projects</p>
+        <img class="bottomcloud" src="images/cloud.png" alt="cloud">
     </div>
 
+    <div class="container">
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-icon">👨‍💻</div>
+                <h2>Fredrik's Projects</h2>
+                <p>Web development projects including finance news aggregation, data visualization, and more.</p>
+                <a href="pages/fredrik/index.html" class="btn">View Projects</a>
+            </div>
+
+            <div class="project-card coming-soon">
+                <div class="project-icon">➕</div>
+                <h2>Add Your Section</h2>
+                <p>More contributors coming soon...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Project Hub © 2026</p>
+    </footer>
+</body>
 </html>
