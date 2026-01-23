@@ -1,0 +1,43 @@
+name: Update Finance News
+
+on:
+  schedule:
+    # Run every 6 hours (at 00:00, 06:00, 12:00, 18:00 UTC)
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allows manual triggering from GitHub Actions tab
+
+jobs:
+  update-news:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      
+      - name: Set up dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl perl
+      
+      - name: Run finance news script
+        run: |
+          cd projects/finance-news
+          bash finance-news-windows.sh
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git diff --quiet projects/finance-news/finance-news.html || echo "changed=true" >> $GITHUB_OUTPUT
+      
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add projects/finance-news/finance-news.html
+          git commit -m "🤖 Auto-update finance news - $(date +'%Y-%m-%d %H:%M UTC')"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
