@@ -3,37 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Hub</title>
+    <title>Fredrik's Portfolio</title>
+    <meta name="description" content="Web development projects: Match Finder and Finansplock">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="faviconTest.ico">
 </head>
 <body>
     <div class="hero">
         <img class="topcloud" src="images/cloud.png" alt="cloud">
-        <h1>Project Hub</h1>
-        <p class="subtitle">A collaborative space for sharing web projects</p>
+        <h1>Fredrik Eriksson</h1>
+        <p class="subtitle">Web Developer & Project Builder</p>
         <img class="bottomcloud" src="images/cloud.png" alt="cloud">
     </div>
 
     <div class="container">
         <div class="projects-grid">
             <div class="project-card">
-                <div class="project-icon">👨‍💻</div>
-                <h2>Fredrik's Projects</h2>
-                <p>Web development projects including finance news aggregation, data visualization, and more.</p>
-                <a href="pages/fredrik/index.html" class="btn">View Projects</a>
+                <div class="project-icon">⚽</div>
+                <h2>Match Finder</h2>
+                <p>Find football matches across streaming services. Track Premier League and Champions League games with real-time scores and broadcasting info for Swedish viewers.</p>
+                <div style="margin-top: 0.5rem; color: #9ca3af; font-size: 0.875rem;">
+                    <span style="margin-right: 1rem;">📺 Viaplay • C More • Max • Prime</span>
+                    <span>🔴 Live scores</span>
+                </div>
+                <a href="projects/match-finder/index.html" class="btn">Launch App</a>
             </div>
 
-            <div class="project-card coming-soon">
-                <div class="project-icon">➕</div>
-                <h2>Add Your Section</h2>
-                <p>More contributors coming soon...</p>
+            <div class="project-card">
+                <div class="project-icon">📰</div>
+                <h2>Finansplock</h2>
+                <p>Swedish finance news aggregator with auto-updates every 6 hours. Curated headlines from Dagens Industri, Avanza, Aftonbladet, and Sveriges Riksbank.</p>
+                <div style="margin-top: 0.5rem; color: #9ca3af; font-size: 0.875rem;">
+                    <span>🤖 Auto-updated via GitHub Actions</span>
+                </div>
+                <a href="projects/finance-news/finance-news.html" class="btn">Read News</a>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>Project Hub © 2026</p>
+        <p>Built with ❤️ using vanilla JavaScript • Hosted on Netlify</p>
+        <p style="margin-top: 0.5rem; font-size: 0.875rem;">
+            <a href="https://github.com/ErikssonF/Portfolio" target="_blank" style="color: #10b981; text-decoration: none;">View on GitHub</a>
+        </p>
     </footer>
 </body>
 </html>

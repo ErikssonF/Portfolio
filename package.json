@@ -1,7 +1,18 @@
 {
   "name": "portfolio",
   "version": "1.0.0",
-  "description": "Fredrik's Portfolio with Match Finder and Finansplock",
+  "description": "Fredrik's Portfolio - Match Finder and Finansplock projects",
+  "scripts": {
+    "dev": "netlify dev",
+    "deploy": "netlify deploy --prod",
+    "update-news": "cd projects/finance-news && bash finance-news-windows.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ErikssonF/Portfolio.git"
+  },
+  "author": "Fredrik Eriksson",
+  "license": "UNLICENSED",
   "dependencies": {
     "node-fetch": "^2.7.0"
   }
