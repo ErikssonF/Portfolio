@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finansplock</title>
+    <title>Swedish Finance News</title>
     <style>
         * {
             margin: 0;
@@ -12,73 +12,59 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #1a1f2e 0%, #2d3748 100%);
+            background: linear-gradient(120deg, #f6f7f8 0%, #eef1f3 50%, #f6f7f8 100%);
             padding: 20px;
             min-height: 100vh;
-            color: #e2e8f0;
+            color: #1f2933;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
         .header {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: #ffffff;
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 14px 40px rgba(17, 24, 39, 0.08);
             margin-bottom: 30px;
             text-align: center;
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            border: 1px solid #e6eaee;
         }
         .header h1 {
-            color: #ffffff;
+            color: #0f172a;
             font-size: 2.4em;
             margin-bottom: 10px;
             letter-spacing: -0.5px;
         }
         .header .date {
-            color: rgba(255, 255, 255, 0.9);
+            color: #6b7280;
             font-size: 1.05em;
         }
-        .back-btn {
-            display: inline-block;
-            padding: 8px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            text-decoration: none;
-            border-radius: 20px;
-            margin-bottom: 15px;
-            transition: background 0.2s;
-            font-weight: 500;
-        }
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
         .news-section {
-            background: #1e293b;
+            background: #ffffff;
             padding: 24px;
             border-radius: 14px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
             margin-bottom: 20px;
             transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid #334155;
+            border: 1px solid #e6eaee;
         }
         .news-section:hover {
             transform: translateY(-3px);
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
         }
         .news-section h2 {
-            color: #10b981;
+            color: #111827;
             font-size: 1.7em;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #334155;
+            border-bottom: 2px solid #cfd6de;
             letter-spacing: -0.2px;
         }
         .news-section .source-link {
             display: inline-block;
             margin-bottom: 15px;
-            color: #60a5fa;
+            color: #2563eb;
             text-decoration: none;
             font-weight: 500;
         }
@@ -87,8 +73,8 @@
         }
         .news-item {
             padding: 12px 0;
-            border-bottom: 1px solid #334155;
-            color: #cbd5e1;
+            border-bottom: 1px solid #e8ecf0;
+            color: #374151;
             line-height: 1.6;
         }
         .news-item:last-child {
@@ -96,15 +82,14 @@
         }
         .news-item:before {
             content: "• ";
-            color: #10b981;
+            color: #9ca3af;
         }
         .news-item a {
-            color: #e2e8f0;
+            color: #0f172a;
             text-decoration: none;
             font-weight: 600;
         }
         .news-item a:hover {
-            color: #10b981;
             text-decoration: underline;
         }
         .news-indicator {
@@ -120,12 +105,26 @@
         }
         .footer {
             text-align: center;
-            color: #94a3b8;
+            color: white;
             margin-top: 30px;
             padding: 20px;
             font-size: 0.9em;
         }
-
+        .refresh-btn {
+            background: #111827;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 24px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .refresh-btn:hover {
+            background: #1f2937;
+            transform: translateY(-1px);
+        }
         .news-columns {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -133,17 +132,17 @@
             margin-top: 15px;
         }
         .news-column {
-            background: #0f172a;
+            background: #f9fafb;
             padding: 15px;
             border-radius: 10px;
-            border: 1px solid #334155;
+            border: 1px solid #e6eaee;
         }
         .news-column h4 {
-            color: #10b981;
+            color: #111827;
             font-size: 1em;
             margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 2px solid #334155;
+            border-bottom: 2px solid #d5dbe3;
             letter-spacing: -0.1px;
         }
         .news-column .news-item {
@@ -152,39 +151,39 @@
         }
         .news-column .news-item:before {
             content: "› ";
-            color: #10b981;
+            color: #9ca3af;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <a href="../../pages/fredrik/index.html" class="back-btn">← Back to Projects</a>
-            <h1>📰 Finansplock</h1>
-            <div class="date">2026-01-23 00:04:47</div>
+            <h1>📰 Swedish Finance News</h1>
+            <div class="date">2026-01-24 13:18:59</div>
+            <button class="refresh-btn" onclick="location.reload()">🔄 Refresh</button>
         </div>
         <div class="news-section">
             <h2>Dagens Industri</h2>
             <a href="https://www.di.se" target="_blank" class="source-link">🔗 Visit source</a>
-            <div class="news-item"><a href="https://www.di.se/live/usa-s-nya-bistandsregler-kan-stoppa-30-miljarder-dollar/" target="_blank">USA:s nya biståndsregler kan stoppa 30 miljarder dollar</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.di.se/live/alcoa-stiger-pa-rapport-i-efterhandel/" target="_blank">Alcoa stiger på rapport i efterhandel</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.di.se/nyheter/danskt-fiasko-stromhopp-fran-dyrt-koldioxiprojekt/" target="_blank">Danskt fiasko: Strömhopp från dyrt koldioxiprojekt</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.di.se/live/rapporten-sanker-intel-i-efterhandeln/" target="_blank">Rapporten sänker Intel i efterhandeln</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.di.se/live/wall-street-fortsatte-upp-meta-tog-taten/" target="_blank">Wall Street fortsatte upp – Meta tog täten</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.di.se/nyheter/mer-motvind-for-trump-i-kampen-om-fed/" target="_blank">Mer motvind för Trump i kampen om Fed</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.di.se/nyheter/gronland-pekas-ut-i-usa-s-nya-forsvarsstrategi/" target="_blank">Grönland pekas ut i USA:s nya försvarsstrategi</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.di.se/nyheter/kristersson-usa-forstar-inte-hur-mycket-relationen-skadats/" target="_blank">Kristersson: USA förstår inte hur mycket relationen skadats</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.di.se/nyheter/nvidia-tappar-ytterligare-en-styrelsemedlem/" target="_blank">Nvidia tappar ytterligare en styrelsemedlem</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.di.se/nyheter/revansch-for-ericsson-historiskt-ras-for-apotea/" target="_blank">Revansch för Ericsson – historiskt ras för Apotea</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.di.se/digital/branschforening-sagar-ny-palaga-for-finansbolag/" target="_blank">Branschförening sågar ny pålaga för finansbolag</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.di.se/nyheter/dollarn-under-9-kronor/" target="_blank">Dollarn under 9 kronor</a> <span class="news-indicator"></span></div>
         </div>
         <div class="news-section">
             <h2>Avanza</h2>
             <a href="https://www.avanza.se/marknadsoversikt.html" target="_blank" class="source-link">🔗 Visit source</a>
             <div class="news-item"><a href="https://www.avanza.se/borsen-idag.html" target="_blank">📊 Börsen idag – Aktiekurser och marknadsöversikt</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.placera.se/telegram/intel-justerat-resultat-0-15-usd-aktie-4-kv-est-0-08-ny-20260122" target="_blank">Justerat resultat 0:15 usd/aktie 4 kv (est 0:08) (ny)</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.placera.se/telegram/alcoa-justerat-resultat-1-26-usd-aktie-4-kv-est-1-01-20260122" target="_blank">Justerat resultat 1:26 usd/aktie 4 kv (est 1:01)</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.placera.se/telegram/new-york-stangde-pa-plus-infor-intels-rapport-s-p-500-0-6-20260122" target="_blank">Stängde på plus inför intels rapport, s&p 500 +0,6%</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.placera.se/telegram/intel-justerat-resultat-0-15-usd-aktie-4-kv-est-0-08-20260122" target="_blank">Justerat resultat 0:15 usd/aktie 4 kv (est 0:08)</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.placera.se/telegram/nordea-inderes-sanker-rekommendation-till-minska-oka-20260122" target="_blank">Inderes sänker rekommendation till minska (öka)</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.placera.se/telegram/qlife-gor-foretradesemission-31-4-mln-kr-20260122" target="_blank">Gör företrädesemission 31,4 mln kr</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.placera.se/telegram/ravaror-nedgangar-i-oljepriserna-adelmetaller-upp-tabell-20260122" target="_blank">Nedgångar i oljepriserna, ädelmetaller upp - tabell</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.placera.se/telegram/new-york-uppat-meta-platforms-lyfter-s-p-500-0-8-20260122" target="_blank">Uppåt, meta platforms lyfter, s&p 500 +0,8%</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/thyssenkrupp-thyssenkrupp-overvager-delvis-forsaljning-av-rothe-erde-20260123" target="_blank">Thyssenkrupp överväger delvis försäljning av rothe erde</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/ledande-indikatorer-i-usa-sjonk-mer-an-vantat-i-manadstakt-i-november-20260123" target="_blank">Ledande indikatorer i usa sjönk mer än väntat i månadstakt i november</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/ukraina-eu-usa-vill-fa-fram-800-mdr-usd-till-ukraina-politico-20260123" target="_blank">Eu, usa vill få fram 800 mdr usd till ukraina - politico</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/dws-invest-global-real-estate-securities-minskade-0-40-procent-i-december-stabila-utsikter-framover-20260123" target="_blank">Dws invest global real estate securities minskade 0,40 procent i december - stabila utsikter framöver</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/rantor-valutor-rantor-upp--silver-nara-100-dollarstrecket-20260123" target="_blank">Räntor upp – silver nära 100-dollarstrecket</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/intel-rasar-i-oppningen-s-p-500-index-sjunker-0-1-procent-20260123" target="_blank">Intel rasar i öppningen, s&p 500-index sjunker 0,1 procent</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/new-york-inleder-blandat-intel-tynger-s-p-500-0-1-20260123" target="_blank">Inleder blandat, intel tynger, s&p 500 +0,1%</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/soltech-satter-vissa-dotterbolag-i-konkurs-rekonstruktion-20260123" target="_blank">Sätter vissa dotterbolag i konkurs, rekonstruktion</a> <span class="news-indicator"></span></div>
         </div>
         <div class="news-section">
             <h2>Aftonbladet Ekonomi</h2>
@@ -192,8 +191,8 @@
             <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/a/zO5onK/5-fallor-som-hindrar-kvinnor-fran-borsen?utm_medium=rss" target="_blank">5 fällor som stoppar kvinnor från börsen</a> <span class="news-indicator"></span></div>
             <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/a/9pmVl9/chefer-petas-fran-arbetsformedlingen-ai-kontroller-bakom-enligt-uppgifter?utm_medium=rss" target="_blank">Därför har cheferna tagits ur tjänst</a> <span class="news-indicator"></span></div>
             <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/a/vrAQEj/arbetsformedlingen-lagger-miljoner-pa-nytt-ai-system-kan-vara-olagligt?utm_medium=rss" target="_blank">Nya AI-systemet kan vara olagligt</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/a/oEAaOK/sa-fungerar-eu-s-handelsbazooka?utm_medium=rss" target="_blank">Så fungerar EU:s handelsbazooka</a> <span class="news-indicator"></span></div>
-            <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/a/oEAaGj/lista-10-alternativ-till-amerikanska-it-jattarna?utm_medium=rss" target="_blank">Tio EU-alternativ till de amerikanska it-jättarna</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/a/xr3xRQ/problem-med-csn-s-utbetalningar?utm_medium=rss" target="_blank">Studielånet försenat – kommer nästa vecka</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/a/wrez95/sa-trumpsakrar-du-ditt-pensionssparande?utm_medium=rss" target="_blank">Så säkrar du din pension mot Trumps alla utspel</a> <span class="news-indicator"></span></div>
             <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/pension/a/gkWLP9/darfor-far-tusentals-svenskar-sankt-pension-i-ar?utm_medium=rss" target="_blank">Tusentals drabbade av sänkt pension 2026</a> <span class="news-indicator"></span></div>
         </div>
         <div class="news-section">
