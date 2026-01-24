@@ -150,7 +150,27 @@ function displayMatches(matches) {
         return;
     }
 
-    matchList.innerHTML = matches.map(match => createMatchCard(match)).join('');
+    // Group matches by broadcaster
+    const grouped = groupMatchesByBroadcaster(matches);
+    
+    let html = '';
+    
+    // Display groups
+    for (const [broadcaster, broadcasterMatches] of Object.entries(grouped)) {
+        html += `
+            <div class="broadcaster-group">
+                <div class="broadcaster-header">
+                    <span class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${broadcaster}</span>
+                    <span class="match-count">${broadcasterMatches.length} ${broadcasterMatches.length === 1 ? 'match' : 'matches'}</span>
+                </div>
+                <div class="matches-grid">
+                    ${broadcasterMatches.map(match => createCompactMatchCard(match)).join('')}
+                </div>
+            </div>
+        `;
+    }
+    
+    matchList.innerHTML = html;
     
     // Add click handlers
     document.querySelectorAll('.match-card').forEach(card => {
@@ -159,6 +179,45 @@ function displayMatches(matches) {
             openStreamingService(competition);
         });
     });
+}
+
+function groupMatchesByBroadcaster(matches) {
+    const groups = {};
+    
+    matches.forEach(match => {
+        const services = getStreamingServicesForCompetition(match.competition);
+        
+        if (!services || services.length === 0) {
+            // No broadcaster info
+            if (!groups['Not Available']) groups['Not Available'] = [];
+            groups['Not Available'].push(match);
+        } else {
+            // Add to each broadcaster's group
+            services.forEach(service => {
+                if (!groups[service]) groups[service] = [];
+                groups[service].push(match);
+            });
+        }
+    });
+    
+    // Sort groups: Viaplay, C More, Max, Prime, then others
+    const order = ['Viaplay', 'C More', 'Max', 'Prime Video'];
+    const sorted = {};
+    
+    order.forEach(service => {
+        if (groups[service]) {
+            sorted[service] = groups[service];
+        }
+    });
+    
+    // Add remaining groups
+    Object.keys(groups).forEach(service => {
+        if (!sorted[service]) {
+            sorted[service] = groups[service];
+        }
+    });
+    
+    return sorted;
 }
 
 function createMatchCard(match) {
@@ -189,6 +248,34 @@ function createMatchCard(match) {
             <div class="match-time">${formatMatchTime(match)}</div>
             
             ${createStreamingBadges(match.competition)}
+        </div>
+    `;
+}
+
+// Compact version for grouped display
+function createCompactMatchCard(match) {
+    const statusClass = getStatusClass(match.status);
+    const statusText = getStatusText(match);
+    const isLive = statusClass === 'live';
+    
+    return `
+        <div class="match-card compact ${statusClass}" data-competition="${match.competition}">
+            <div class="compact-header">
+                <span class="match-status-mini ${statusClass}">${isLive ? '🔴' : ''}</span>
+                <span class="match-time-mini">${formatCompactTime(match)}</span>
+            </div>
+            <div class="compact-teams">
+                <div class="compact-team">
+                    ${match.homeLogo ? `<img src="${match.homeLogo}" alt="" class="team-logo-mini">` : ''}
+                    <span class="team-name-mini">${match.homeTeam}</span>
+                    ${match.homeScore !== null ? `<strong class="score-mini">${match.homeScore}</strong>` : ''}
+                </div>
+                <div class="compact-team">
+                    ${match.awayLogo ? `<img src="${match.awayLogo}" alt="" class="team-logo-mini">` : ''}
+                    <span class="team-name-mini">${match.awayTeam}</span>
+                    ${match.awayScore !== null ? `<strong class="score-mini">${match.awayScore}</strong>` : ''}
+                </div>
+            </div>
         </div>
     `;
 }
@@ -226,6 +313,35 @@ function formatMatchTime(match) {
         weekday: 'short'
     });
     return `${dateStr} at ${timeStr}`;
+}
+
+function formatCompactTime(match) {
+    const date = new Date(match.datetime);
+    const now = new Date();
+    const diffMinutes = Math.floor((date - now) / (1000 * 60));
+    const diffDays = Math.floor((date - now) / (1000 * 60 * 60 * 24));
+    
+    const timeStr = date.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+    
+    // Live matches
+    if (match.homeScore !== null) {
+        return match.status === 'HT' ? 'HT' : match.elapsed ? `${match.elapsed}'` : 'LIVE';
+    }
+    
+    // Starting soon
+    if (diffMinutes > 0 && diffMinutes <= 30) {
+        return `in ${diffMinutes}m`;
+    }
+    
+    // Today
+    if (diffDays === 0) return timeStr;
+    
+    // Tomorrow
+    if (diffDays === 1) return `Tom ${timeStr}`;
+    
+    // Future
+    const dateStr = date.toLocaleDateString('sv-SE', { month: 'numeric', day: 'numeric' });
+    return `${dateStr} ${timeStr}`;
 }
 
 function createStreamingBadges(competition) {

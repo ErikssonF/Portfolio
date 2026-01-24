@@ -180,6 +180,104 @@ h1 {
     cursor: pointer;
 }
 
+/* Compact card styling */
+.match-card.compact {
+    padding: 12px 16px;
+    border-radius: 10px;
+}
+
+.compact-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.match-status-mini {
+    font-size: 0.85em;
+    font-weight: 600;
+}
+
+.match-time-mini {
+    color: #94a3b8;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+.compact-teams {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.compact-team {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.team-logo-mini {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.team-name-mini {
+    flex: 1;
+    font-size: 0.95em;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.score-mini {
+    font-size: 1.1em;
+    color: #10b981;
+    min-width: 24px;
+    text-align: right;
+}
+
+/* Broadcaster groups */
+.broadcaster-group {
+    margin-bottom: 30px;
+}
+
+.broadcaster-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+    padding: 12px 16px;
+    background: #1e293b;
+    border-radius: 12px;
+    border: 1px solid #334155;
+}
+
+.broadcaster-badge {
+    font-weight: 700;
+    font-size: 1.1em;
+    padding: 6px 16px;
+    border-radius: 8px;
+}
+
+.match-count {
+    color: #94a3b8;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+/* Grid layout for compact cards */
+.matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 12px;
+}
+
+@media (max-width: 768px) {
+    .matches-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .match-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
