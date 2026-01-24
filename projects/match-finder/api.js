@@ -172,11 +172,11 @@ class FootballAPI {
         
         console.log(`Fetching matches for date: ${today}`);
         
-        // Remove season parameter - let API return current season automatically
+        // Season 2025 = 2025/26 season (Aug 2025 - May 2026)
         // Premier League ID: 39, Champions League ID: 2
         const [plMatches, clMatches] = await Promise.all([
-            this.makeRequest(`/fixtures?league=39&date=${today}`),
-            this.makeRequest(`/fixtures?league=2&date=${today}`)
+            this.makeRequest(`/fixtures?league=39&season=2025&date=${today}`),
+            this.makeRequest(`/fixtures?league=2&season=2025&date=${today}`)
         ]);
 
         console.log(`Premier League matches found: ${plMatches.response?.length || 0}`);
@@ -207,10 +207,10 @@ class FootballAPI {
 
         console.log(`Fetching upcoming matches from ${fromDate} to ${toDate}`);
 
-        // Remove season parameter - let API return current season automatically
+        // Season 2025 = 2025/26 season (Aug 2025 - May 2026)
         const [plMatches, clMatches] = await Promise.all([
-            this.makeRequest(`/fixtures?league=39&from=${fromDate}&to=${toDate}`),
-            this.makeRequest(`/fixtures?league=2&from=${fromDate}&to=${toDate}`)
+            this.makeRequest(`/fixtures?league=39&season=2025&from=${fromDate}&to=${toDate}`),
+            this.makeRequest(`/fixtures?league=2&season=2025&from=${fromDate}&to=${toDate}`)
         ]);
 
         console.log(`Premier League upcoming: ${plMatches.response?.length || 0}`);
