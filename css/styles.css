@@ -8,8 +8,8 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
   line-height: 1.6;
-  color: #333;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #e2e8f0;
+  background: linear-gradient(135deg, #1a1f2e 0%, #2d3748 100%);
   min-height: 100vh;
 }
 
@@ -37,7 +37,7 @@ p {
   position: relative;
   padding: 120px 20px 100px;
   text-align: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   overflow: hidden;
 }
 
@@ -82,17 +82,18 @@ p {
 }
 
 .project-card {
-  background: white;
+  background: #1e293b;
   border-radius: 16px;
   padding: 40px 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   transition: transform 0.3s, box-shadow 0.3s;
   text-align: center;
+  border: 1px solid #334155;
 }
 
 .project-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
 }
 
 .project-card.coming-soon {
@@ -102,7 +103,7 @@ p {
 
 .project-card.coming-soon:hover {
   transform: none;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
 .project-icon {
@@ -111,12 +112,12 @@ p {
 }
 
 .project-card h2 {
-  color: #333;
+  color: #10b981;
   margin-bottom: 15px;
 }
 
 .project-card p {
-  color: #666;
+  color: #cbd5e1;
   line-height: 1.7;
   margin-bottom: 25px;
 }
@@ -124,7 +125,7 @@ p {
 .btn {
   display: inline-block;
   padding: 12px 30px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
   text-decoration: none;
   border-radius: 25px;
@@ -134,7 +135,7 @@ p {
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
 }
 
 footer {

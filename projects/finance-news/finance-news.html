@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swedish Finance News</title>
+    <title>Finansplock</title>
     <style>
         * {
             margin: 0;
@@ -12,59 +12,73 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(120deg, #f6f7f8 0%, #eef1f3 50%, #f6f7f8 100%);
+            background: linear-gradient(135deg, #1a1f2e 0%, #2d3748 100%);
             padding: 20px;
             min-height: 100vh;
-            color: #1f2933;
+            color: #e2e8f0;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
         .header {
-            background: #ffffff;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 14px 40px rgba(17, 24, 39, 0.08);
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.3);
             margin-bottom: 30px;
             text-align: center;
-            border: 1px solid #e6eaee;
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
         .header h1 {
-            color: #0f172a;
+            color: #ffffff;
             font-size: 2.4em;
             margin-bottom: 10px;
             letter-spacing: -0.5px;
         }
         .header .date {
-            color: #6b7280;
+            color: rgba(255, 255, 255, 0.9);
             font-size: 1.05em;
         }
+        .back-btn {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
         .news-section {
-            background: #ffffff;
+            background: #1e293b;
             padding: 24px;
             border-radius: 14px;
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
             margin-bottom: 20px;
             transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid #e6eaee;
+            border: 1px solid #334155;
         }
         .news-section:hover {
             transform: translateY(-3px);
-            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
         }
         .news-section h2 {
-            color: #111827;
+            color: #10b981;
             font-size: 1.7em;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #cfd6de;
+            border-bottom: 2px solid #334155;
             letter-spacing: -0.2px;
         }
         .news-section .source-link {
             display: inline-block;
             margin-bottom: 15px;
-            color: #2563eb;
+            color: #60a5fa;
             text-decoration: none;
             font-weight: 500;
         }
@@ -73,8 +87,8 @@
         }
         .news-item {
             padding: 12px 0;
-            border-bottom: 1px solid #e8ecf0;
-            color: #374151;
+            border-bottom: 1px solid #334155;
+            color: #cbd5e1;
             line-height: 1.6;
         }
         .news-item:last-child {
@@ -82,14 +96,15 @@
         }
         .news-item:before {
             content: "• ";
-            color: #9ca3af;
+            color: #10b981;
         }
         .news-item a {
-            color: #0f172a;
+            color: #e2e8f0;
             text-decoration: none;
             font-weight: 600;
         }
         .news-item a:hover {
+            color: #10b981;
             text-decoration: underline;
         }
         .news-indicator {
@@ -105,26 +120,12 @@
         }
         .footer {
             text-align: center;
-            color: white;
+            color: #94a3b8;
             margin-top: 30px;
             padding: 20px;
             font-size: 0.9em;
         }
-        .refresh-btn {
-            background: #111827;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 24px;
-            font-size: 1em;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.2s, transform 0.2s;
-        }
-        .refresh-btn:hover {
-            background: #1f2937;
-            transform: translateY(-1px);
-        }
+
         .news-columns {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -132,17 +133,17 @@
             margin-top: 15px;
         }
         .news-column {
-            background: #f9fafb;
+            background: #0f172a;
             padding: 15px;
             border-radius: 10px;
-            border: 1px solid #e6eaee;
+            border: 1px solid #334155;
         }
         .news-column h4 {
-            color: #111827;
+            color: #10b981;
             font-size: 1em;
             margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 2px solid #d5dbe3;
+            border-bottom: 2px solid #334155;
             letter-spacing: -0.1px;
         }
         .news-column .news-item {
@@ -151,16 +152,16 @@
         }
         .news-column .news-item:before {
             content: "› ";
-            color: #9ca3af;
+            color: #10b981;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📰 Swedish Finance News</h1>
+            <a href="../../pages/fredrik/index.html" class="back-btn">← Back to Projects</a>
+            <h1>📰 Finansplock</h1>
             <div class="date">2026-01-23 00:04:47</div>
-            <button class="refresh-btn" onclick="location.reload()">🔄 Refresh</button>
         </div>
         <div class="news-section">
             <h2>Dagens Industri</h2>
