@@ -1,6 +1,6 @@
 // Main Application Logic
 const api = new FootballAPI();
-let currentFilter = 'all';
+let currentFilter = 'today';
 let autoRefreshInterval = null;
 
 // DOM Elements
@@ -96,19 +96,24 @@ async function loadMatches() {
                 matches = await api.getLiveMatches();
                 break;
             case 'today':
-                matches = await api.getTodaysMatches();
+                // Get all matches for today (live + upcoming)
+                const [liveToday, upcomingToday] = await Promise.all([
+                    api.getLiveMatches(),
+                    api.getTodaysMatches()
+                ]);
+                matches = [...liveToday, ...upcomingToday];
                 break;
-            case 'upcoming':
-                matches = await api.getUpcomingMatches();
+            case 'tomorrow':
+                matches = await getTomorrowsMatches();
                 break;
-            case 'starting-soon':
-                matches = await getStartingSoonMatches();
+            case 'this-week':
+                matches = await getThisWeeksMatches();
                 break;
-            case 'all':
             default:
+                // Default to today
                 const [live, upcoming] = await Promise.all([
                     api.getLiveMatches(),
-                    api.getUpcomingMatches()
+                    api.getTodaysMatches()
                 ]);
                 matches = [...live, ...upcoming];
                 break;
@@ -138,6 +143,40 @@ async function getStartingSoonMatches() {
     });
 }
 
+// Get tomorrow's matches
+async function getTomorrowsMatches() {
+    const allMatches = await api.getUpcomingMatches();
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    
+    const dayAfter = new Date(tomorrow);
+    dayAfter.setDate(dayAfter.getDate() + 1);
+    
+    return allMatches.filter(match => {
+        const matchTime = new Date(match.date);
+        return matchTime >= tomorrow && matchTime < dayAfter;
+    });
+}
+
+// Get matches in the next week
+async function getThisWeeksMatches() {
+    const allMatches = await api.getUpcomingMatches();
+    const now = new Date();
+    const dayAfterTomorrow = new Date(now);
+    dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
+    dayAfterTomorrow.setHours(0, 0, 0, 0);
+    
+    const weekFromNow = new Date(now);
+    weekFromNow.setDate(weekFromNow.getDate() + 7);
+    
+    return allMatches.filter(match => {
+        const matchTime = new Date(match.date);
+        return matchTime >= dayAfterTomorrow && matchTime <= weekFromNow;
+    });
+}
+
 function displayMatches(matches) {
     if (matches.length === 0) {
         matchList.innerHTML = `
@@ -148,12 +187,86 @@ function displayMatches(matches) {
         return;
     }
 
-    // Group matches by broadcaster
-    const grouped = groupMatchesByBroadcaster(matches);
+    // Separate live and upcoming matches
+    const liveMatches = matches.filter(m => {
+        const statusClass = getStatusClass(m.status);
+        return statusClass === 'live';
+    });
     
+    const upcomingMatches = matches.filter(m => {
+        const statusClass = getStatusClass(m.status);
+        return statusClass === 'upcoming';
+    });
+    
+    const finishedMatches = matches.filter(m => {
+        const statusClass = getStatusClass(m.status);
+        return statusClass === 'finished';
+    });
+
+    let html = '';
+
+    // Show LIVE section first
+    if (liveMatches.length > 0) {
+        html += `
+            <div class="match-section">
+                <div class="section-header live-header">
+                    <span class="section-icon">🔴</span>
+                    <h2 class="section-title">Live Now</h2>
+                    <span class="match-count">${liveMatches.length} ${liveMatches.length === 1 ? 'match' : 'matches'}</span>
+                </div>
+                ${createMatchesByBroadcaster(liveMatches)}
+            </div>
+        `;
+    }
+
+    // Show UPCOMING section
+    if (upcomingMatches.length > 0) {
+        const sectionTitle = currentFilter === 'today' ? 'Upcoming Today' : 
+                           currentFilter === 'tomorrow' ? 'Tomorrow' :
+                           currentFilter === 'this-week' ? 'This Week' : 'Upcoming';
+        
+        html += `
+            <div class="match-section">
+                <div class="section-header">
+                    <span class="section-icon">📅</span>
+                    <h2 class="section-title">${sectionTitle}</h2>
+                    <span class="match-count">${upcomingMatches.length} ${upcomingMatches.length === 1 ? 'match' : 'matches'}</span>
+                </div>
+                ${createMatchesByBroadcaster(upcomingMatches)}
+            </div>
+        `;
+    }
+
+    // Show FINISHED section (if any)
+    if (finishedMatches.length > 0) {
+        html += `
+            <div class="match-section">
+                <div class="section-header">
+                    <span class="section-icon">✅</span>
+                    <h2 class="section-title">Finished</h2>
+                    <span class="match-count">${finishedMatches.length} ${finishedMatches.length === 1 ? 'match' : 'matches'}</span>
+                </div>
+                ${createMatchesByBroadcaster(finishedMatches)}
+            </div>
+        `;
+    }
+    
+    matchList.innerHTML = html;
+    
+    // Add click handlers
+    document.querySelectorAll('.match-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const competition = card.dataset.competition;
+            openStreamingService(competition);
+        });
+    });
+}
+
+// Helper to create broadcaster groups
+function createMatchesByBroadcaster(matches) {
+    const grouped = groupMatchesByBroadcaster(matches);
     let html = '';
     
-    // Display groups
     for (const [broadcaster, broadcasterMatches] of Object.entries(grouped)) {
         html += `
             <div class="broadcaster-group">
@@ -168,15 +281,7 @@ function displayMatches(matches) {
         `;
     }
     
-    matchList.innerHTML = html;
-    
-    // Add click handlers
-    document.querySelectorAll('.match-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const competition = card.dataset.competition;
-            openStreamingService(competition);
-        });
-    });
+    return html;
 }
 
 function groupMatchesByBroadcaster(matches) {
