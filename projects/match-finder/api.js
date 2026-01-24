@@ -172,19 +172,27 @@ class FootballAPI {
         
         console.log(`Fetching matches for date: ${today}`);
         
-        // Season 2025 = 2025/26 season (Aug 2025 - May 2026)
-        // Premier League ID: 39, Champions League ID: 2
-        const [plMatches, clMatches] = await Promise.all([
+        // Try multiple seasons to see which has data
+        console.log('Testing season 2025 (2025/26)...');
+        const [plMatches2025, clMatches2025] = await Promise.all([
             this.makeRequest(`/fixtures?league=39&season=2025&date=${today}`),
             this.makeRequest(`/fixtures?league=2&season=2025&date=${today}`)
         ]);
-
-        console.log(`Premier League matches found: ${plMatches.response?.length || 0}`);
-        console.log(`Champions League matches found: ${clMatches.response?.length || 0}`);
-        console.log('PL Response:', plMatches);
-        console.log('CL Response:', clMatches);
         
-        return this.combineMatches(plMatches, clMatches);
+        console.log('Season 2025 - PL:', plMatches2025.response?.length || 0, 'CL:', clMatches2025.response?.length || 0);
+        
+        // If no results, try season 2024
+        if ((plMatches2025.response?.length || 0) === 0 && (clMatches2025.response?.length || 0) === 0) {
+            console.log('No matches in season 2025, trying season 2024 (2024/25)...');
+            const [plMatches2024, clMatches2024] = await Promise.all([
+                this.makeRequest(`/fixtures?league=39&season=2024&date=${today}`),
+                this.makeRequest(`/fixtures?league=2&season=2024&date=${today}`)
+            ]);
+            console.log('Season 2024 - PL:', plMatches2024.response?.length || 0, 'CL:', clMatches2024.response?.length || 0);
+            return this.combineMatches(plMatches2024, clMatches2024);
+        }
+
+        return this.combineMatches(plMatches2025, clMatches2025);
     }
 
     // Get live matches
