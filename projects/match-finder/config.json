@@ -1,0 +1,37 @@
+{
+  "broadcastingRights": {
+    "Premier League": {
+      "services": ["Viaplay"],
+      "url": "https://viaplay.se/sport/fotboll/premier-league"
+    },
+    "UEFA Champions League": {
+      "services": ["C More", "Viaplay"],
+      "urls": {
+        "C More": "https://www.cmore.se/sport/fotboll/champions-league",
+        "Viaplay": "https://viaplay.se/sport/fotboll/champions-league"
+      }
+    }
+  },
+  "streamingServices": {
+    "Viaplay": {
+      "name": "Viaplay",
+      "baseUrl": "https://viaplay.se",
+      "color": "#E50914"
+    },
+    "C More": {
+      "name": "C More",
+      "baseUrl": "https://www.cmore.se",
+      "color": "#00A651"
+    },
+    "Max": {
+      "name": "Max",
+      "baseUrl": "https://www.max.com/se",
+      "color": "#002BE7"
+    },
+    "Prime": {
+      "name": "Prime Video",
+      "baseUrl": "https://www.primevideo.com",
+      "color": "#00A8E1"
+    }
+  }
+}
