@@ -172,27 +172,22 @@ class FootballAPI {
         
         console.log(`Fetching matches for date: ${today}`);
         
-        // Try multiple seasons to see which has data
-        console.log('Testing season 2025 (2025/26)...');
-        const [plMatches2025, clMatches2025] = await Promise.all([
+        // Test: Get last 10 fixtures regardless of date to see if API has ANY data
+        console.log('Testing: Getting last 10 Premier League fixtures...');
+        const testPL = await this.makeRequest(`/fixtures?league=39&season=2025&last=10`);
+        console.log('Last 10 PL fixtures:', testPL.response?.length || 0, testPL);
+        
+        // Try getting today's matches
+        const [plMatches, clMatches] = await Promise.all([
             this.makeRequest(`/fixtures?league=39&season=2025&date=${today}`),
             this.makeRequest(`/fixtures?league=2&season=2025&date=${today}`)
         ]);
-        
-        console.log('Season 2025 - PL:', plMatches2025.response?.length || 0, 'CL:', clMatches2025.response?.length || 0);
-        
-        // If no results, try season 2024
-        if ((plMatches2025.response?.length || 0) === 0 && (clMatches2025.response?.length || 0) === 0) {
-            console.log('No matches in season 2025, trying season 2024 (2024/25)...');
-            const [plMatches2024, clMatches2024] = await Promise.all([
-                this.makeRequest(`/fixtures?league=39&season=2024&date=${today}`),
-                this.makeRequest(`/fixtures?league=2&season=2024&date=${today}`)
-            ]);
-            console.log('Season 2024 - PL:', plMatches2024.response?.length || 0, 'CL:', clMatches2024.response?.length || 0);
-            return this.combineMatches(plMatches2024, clMatches2024);
-        }
 
-        return this.combineMatches(plMatches2025, clMatches2025);
+        console.log(`Season 2025 Today - PL: ${plMatches.response?.length || 0}, CL: ${clMatches.response?.length || 0}`);
+        console.log('PL Full Response:', plMatches);
+        console.log('CL Full Response:', clMatches);
+        
+        return this.combineMatches(plMatches, clMatches);
     }
 
     // Get live matches
