@@ -103,6 +103,9 @@ async function loadMatches() {
             case 'upcoming':
                 matches = await api.getUpcomingMatches();
                 break;
+            case 'starting-soon':
+                matches = await getStartingSoonMatches();
+                break;
             case 'all':
             default:
                 const [live, upcoming] = await Promise.all([
@@ -123,6 +126,18 @@ async function loadMatches() {
         showError(error.message || 'Failed to load matches. Please check your API key.');
         hideLoading();
     }
+}
+
+// Get matches starting within the next 30 minutes
+async function getStartingSoonMatches() {
+    const allMatches = await api.getUpcomingMatches();
+    const now = new Date();
+    const soonThreshold = new Date(now.getTime() + 30 * 60 * 1000); // 30 minutes from now
+    
+    return allMatches.filter(match => {
+        const matchTime = new Date(match.date);
+        return matchTime >= now && matchTime <= soonThreshold;
+    });
 }
 
 function displayMatches(matches) {
