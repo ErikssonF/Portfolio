@@ -170,24 +170,14 @@ class FootballAPI {
     async getTodaysMatches() {
         const today = new Date().toISOString().split('T')[0];
         
-        console.log(`Fetching matches for date: ${today}`);
+        console.log(`=== TESTING ABSOLUTE MINIMUM API CALL ===`);
+        console.log('Call 1: Just league=39 (no other parameters)');
+        const minimalTest = await this.makeRequest(`/fixtures?league=39`);
+        console.log('Minimal call result:', minimalTest);
+        console.log('Results:', minimalTest.response?.length || 0, 'fixtures returned');
         
-        // Test: Get last 10 fixtures regardless of date to see if API has ANY data
-        console.log('Testing: Getting last 10 Premier League fixtures...');
-        const testPL = await this.makeRequest(`/fixtures?league=39&season=2025&last=10`);
-        console.log('Last 10 PL fixtures:', testPL.response?.length || 0, testPL);
-        
-        // Try getting today's matches
-        const [plMatches, clMatches] = await Promise.all([
-            this.makeRequest(`/fixtures?league=39&season=2025&date=${today}`),
-            this.makeRequest(`/fixtures?league=2&season=2025&date=${today}`)
-        ]);
-
-        console.log(`Season 2025 Today - PL: ${plMatches.response?.length || 0}, CL: ${clMatches.response?.length || 0}`);
-        console.log('PL Full Response:', plMatches);
-        console.log('CL Full Response:', clMatches);
-        
-        return this.combineMatches(plMatches, clMatches);
+        // Return empty for now while we test
+        return [];
     }
 
     // Get live matches
