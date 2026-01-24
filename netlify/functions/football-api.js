@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 
 // Rate limiting: Track requests per IP
 const requestCounts = new Map();
-const RATE_LIMIT_PER_IP = 20; // Each visitor gets 20 requests per day
+const RATE_LIMIT_PER_IP = 100; // Temporarily increased for testing (was 20)
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 const responseCache = new Map();
 
