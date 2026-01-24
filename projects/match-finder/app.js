@@ -16,6 +16,8 @@ const filterBtns = document.querySelectorAll('.filter-btn');
 const apiNotice = document.querySelector('.api-notice');
 const rateLimitInfo = document.getElementById('rateLimitInfo');
 const requestsRemaining = document.getElementById('requestsRemaining');
+const apiCallCount = document.getElementById('apiCallCount');
+const cacheStatus = document.getElementById('cacheStatus');
 
 // Initialize app
 function init() {
@@ -24,15 +26,11 @@ function init() {
                         window.location.hostname !== '127.0.0.1';
     
     if (isProduction) {
-        // Hide API key input on production - using Netlify Function
-        apiNotice.innerHTML = `
-            <p style="color: #10b981;">✅ Ready to use! Each visitor gets 20 requests per day.</p>
-            <p style="font-size: 0.9em; margin-top: 10px; color: #94a3b8;">
-                Data refreshes every 5 minutes automatically. Shared with friends!
-            </p>
-        `;
+        // Hide API key input on production
+        apiNotice.style.display = 'none';
         loadMatches();
         startAutoRefresh();
+        updateApiStatusDisplay();
     } else {
         // Local development - need API key
         if (api.hasApiKey()) {
@@ -413,7 +411,29 @@ function hideError() {
 
 function updateLastUpdateTime() {
     const now = new Date();
-    lastUpdateSpan.textContent = now.toLocaleTimeString('sv-SE');
+    lastUpdateSpan.textContent = now.toLocaleTimeString('sv-SE', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+    updateApiStatusDisplay();
+}
+
+function updateApiStatusDisplay() {
+    // Update API call counter
+    const isProduction = window.location.hostname !== 'localhost' && 
+                        window.location.hostname !== '127.0.0.1';
+    
+    if (isProduction) {
+        // Show that we're using cached data most of the time
+        apiCallCount.textContent = `Cached responses active`;
+        cacheStatus.textContent = `Active (5 min TTL)`;
+    } else {
+        // Local development - show actual count
+        const remaining = api.getRemainingRequests();
+        const used = 100 - remaining;
+        apiCallCount.textContent = `${used} used / ${remaining} left`;
+        cacheStatus.textContent = `Active (5 min TTL)`;
+    }
 }
 
 function startAutoRefresh() {

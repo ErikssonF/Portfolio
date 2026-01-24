@@ -69,6 +69,19 @@ class FootballAPI {
         return this.apiKey !== '';
     }
 
+    getCacheInfo() {
+        const info = {};
+        for (const key in this.cache) {
+            const cached = this.cache[key];
+            const age = Math.floor((Date.now() - cached.timestamp) / 1000);
+            info[key] = {
+                isValid: Date.now() - cached.timestamp < this.cacheExpiry,
+                age: age
+            };
+        }
+        return info;
+    }
+
     getCacheKey(endpoint) {
         return `cache_${endpoint}`;
     }

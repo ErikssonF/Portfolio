@@ -49,8 +49,21 @@
         </div>
 
         <footer class="app-footer">
-            <p>Last updated: <span id="lastUpdate">--:--</span></p>
-            <button id="refreshBtn" class="refresh-btn">🔄 Refresh</button>
+            <div class="footer-status">
+                <div class="status-item">
+                    <span class="status-label">🔄 Cache:</span>
+                    <span id="cacheStatus" class="status-value">Active (5 min)</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">📡 API Calls:</span>
+                    <span id="apiCallCount" class="status-value">0 today</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">⏱️ Last update:</span>
+                    <span id="lastUpdate" class="status-value">--:--</span>
+                </div>
+            </div>
+            <button id="refreshBtn" class="refresh-btn">🔄 Refresh Now</button>
         </footer>
     </div>
 

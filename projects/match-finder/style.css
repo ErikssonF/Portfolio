@@ -408,10 +408,39 @@ h1 {
 }
 
 .app-footer {
-    text-align: center;
     margin-top: 40px;
     padding: 20px;
+    text-align: center;
+}
+
+.footer-status {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+}
+
+.status-label {
     color: #94a3b8;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.status-value {
+    color: #10b981;
+    font-weight: 600;
+    font-size: 0.9em;
 }
 
 .refresh-btn {
