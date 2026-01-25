@@ -297,8 +297,11 @@ function createMatchesByBroadcaster(matches) {
         // Don't make Viaplay PL a link or add color
         const isViaplayPL = broadcaster === 'Viaplay' && competition === 'Premier League';
         
-        // Change "Not Available" to "NFL"
-        const displayLabel = label === 'Not Available' ? 'NFL' : label;
+        // Change "Not Available" to "NFL", and Viaplay PL to just "Premier League"
+        let displayLabel = label === 'Not Available' ? 'NFL' : label;
+        if (isViaplayPL) {
+            displayLabel = 'Premier League';
+        }
         
         const broadcasterBadge = broadcasterUrl && !isViaplayPL
             ? `<a href="${broadcasterUrl}" target="_blank" class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${displayLabel}</a>`
