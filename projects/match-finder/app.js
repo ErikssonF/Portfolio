@@ -169,35 +169,6 @@ async function getTomorrowsMatches() {
     return filtered.map(m => api.formatMatch(m));
 }
 
-// Get matches in the next week (day after tomorrow to +7 days)
-async function getThisWeeksMatches() {
-    const dayAfterTomorrow = new Date();
-    dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
-    const fromDate = dayAfterTomorrow.toISOString().split('T')[0];
-    
-    const weekFromNow = new Date();
-    weekFromNow.setDate(weekFromNow.getDate() + 7);
-    const toDate = weekFromNow.toISOString().split('T')[0];
-    
-    console.log(`Fetching ALL matches from ${fromDate} to ${toDate}`);
-    
-    const allMatches = await api.makeRequest(`/fixtures?from=${fromDate}&to=${toDate}`);
-    
-    console.log(`Total matches in range: ${allMatches.response?.length || 0}`);
-    
-    // Filter for PL & CL
-    const filtered = (allMatches.response || []).filter(match => {
-        const leagueId = match.league?.id;
-        return leagueId === 39 || leagueId === 2;
-    });
-    
-    console.log(`This week filtered - PL & CL: ${filtered.length}`);
-    
-    return filtered.map(m => api.formatMatch(m)).sort((a, b) => 
-        new Date(a.datetime) - new Date(b.datetime)
-    );
-}
-
 function displayMatches(matches) {
     if (matches.length === 0) {
         matchList.innerHTML = `
