@@ -92,20 +92,12 @@ async function loadMatches() {
         let matches = [];
         
         switch(currentFilter) {
-            case 'live':
-                // Filter today's matches for live ones (no API call needed)
-                const todayMatches = await api.getTodaysMatches();
-                matches = todayMatches.filter(match => isMatchLive(match.status));
-                break;
             case 'today':
                 // Get all matches for today (includes live + upcoming + finished)
                 matches = await api.getTodaysMatches();
                 break;
             case 'tomorrow':
                 matches = await getTomorrowsMatches();
-                break;
-            case 'this-week':
-                matches = await getThisWeeksMatches();
                 break;
             default:
                 // Default to today
@@ -254,11 +246,31 @@ function displayMatches(matches) {
     
     matchList.innerHTML = html;
     
-    // Add click handlers
+    // Add click handlers for match cards
     document.querySelectorAll('.match-card').forEach(card => {
         card.addEventListener('click', () => {
             const competition = card.dataset.competition;
             openStreamingService(competition);
+        });
+    });
+    
+    // Add collapse/expand handlers for broadcaster groups
+    document.querySelectorAll('.broadcaster-header[data-toggle]').forEach(header => {
+        header.addEventListener('click', (e) => {
+            // Don't collapse if clicking on the badge link
+            if (e.target.tagName === 'A') return;
+            
+            const targetId = header.dataset.toggle;
+            const content = document.getElementById(targetId);
+            const icon = header.querySelector('.collapse-icon');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'grid';
+                icon.textContent = '▼';
+            } else {
+                content.style.display = 'none';
+                icon.textContent = '▶';
+            }
         });
     });
 }
@@ -279,17 +291,21 @@ function createMatchesByBroadcaster(matches) {
             ? `${broadcaster} - ${competition.replace('UEFA ', '')}`
             : broadcaster;
         
+        // Create unique ID for collapsible group
+        const groupId = `group-${key.replace(/[^a-zA-Z0-9]/g, '-')}`;
+        
         const broadcasterBadge = broadcasterUrl 
             ? `<a href="${broadcasterUrl}" target="_blank" class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${label}</a>`
             : `<span class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${label}</span>`;
         
         html += `
             <div class="broadcaster-group">
-                <div class="broadcaster-header">
+                <div class="broadcaster-header" data-toggle="${groupId}">
+                    <span class="collapse-icon">▼</span>
                     ${broadcasterBadge}
                     <span class="match-count">${broadcasterMatches.length} ${broadcasterMatches.length === 1 ? 'match' : 'matches'}</span>
                 </div>
-                <div class="matches-grid">
+                <div class="matches-grid" id="${groupId}">
                     ${broadcasterMatches.map(match => createCompactMatchCard(match)).join('')}
                 </div>
             </div>

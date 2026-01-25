@@ -26,22 +26,6 @@ body {
     box-shadow: 0 14px 40px rgba(0, 0, 0, 0.3);
 }
 
-.back-btn {
-    display: inline-block;
-    padding: 8px 20px;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    text-decoration: none;
-    border-radius: 20px;
-    margin-bottom: 15px;
-    transition: background 0.2s;
-    font-weight: 500;
-}
-
-.back-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
 h1 {
     color: white;
     font-size: 2.5em;
@@ -291,6 +275,20 @@ h1 {
     background: #1e293b;
     border-radius: 12px;
     border: 1px solid #334155;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.broadcaster-header:hover {
+    background: #2d3748;
+}
+
+.collapse-icon {
+    font-size: 0.8em;
+    color: #94a3b8;
+    transition: transform 0.2s;
+    width: 16px;
 }
 
 .broadcaster-badge {
