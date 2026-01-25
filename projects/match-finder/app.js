@@ -429,6 +429,12 @@ function formatCompactTime(match) {
     
     const timeStr = date.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
     
+    // Finished matches - show FT instead of time
+    const statusClass = getStatusClass(match.status);
+    if (statusClass === 'finished') {
+        return 'FT';
+    }
+    
     // Live matches
     if (match.homeScore !== null) {
         return match.status === 'HT' ? 'HT' : match.elapsed ? `${match.elapsed}'` : 'LIVE';
