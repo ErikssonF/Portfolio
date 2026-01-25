@@ -101,15 +101,35 @@ async function getLeaderboard(headers) {
     const leaderboard = {};
 
     for (const file of weekFiles) {
+        // Extract week number from filename (e.g., "week-1.json" -> 1)
+        const weekMatch = file.name.match(/week-(\d+)\.json/);
+        if (!weekMatch) continue;
+        const week = parseInt(weekMatch[1]);
+        
         const weekData = JSON.parse(Buffer.from(file.content, 'base64').toString());
         
-        // TODO: Compare picks against actual results and score
-        // For now, just count participation
+        // Get actual results from Sleeper for this week
+        const actualResults = await getWeekResults(week);
+        
+        // Score each user's picks
         for (const [user, data] of Object.entries(weekData)) {
             if (!leaderboard[user]) {
                 leaderboard[user] = { correct: 0, wrong: 0, total: 0 };
             }
-            leaderboard[user].total += Object.keys(data.picks || {}).length;
+            
+            // Compare picks against actual results
+            for (const [matchupId, pickedRosterId] of Object.entries(data.picks || {})) {
+                const actualWinner = actualResults[matchupId];
+                
+                if (actualWinner) {
+                    leaderboard[user].total++;
+                    if (actualWinner === pickedRosterId) {
+                        leaderboard[user].correct++;
+                    } else {
+                        leaderboard[user].wrong++;
+                    }
+                }
+            }
         }
     }
 
@@ -119,6 +139,48 @@ async function getLeaderboard(headers) {
         body: JSON.stringify(leaderboard)
     };
 }
+
+async function getWeekResults(week) {
+    const endpoint = `league/${LEAGUE_ID}/matchups/${week}`;
+    const sleeperUrl = `https://api.sleeper.app/v1/${endpoint}`;
+    
+    try {
+        const response = await fetch(sleeperUrl);
+        const matchups = await response.json();
+        
+        // Group by matchup_id and determine winners
+        const winners = {};
+        const matchupGroups = {};
+        
+        matchups.forEach(matchup => {
+            if (!matchup.matchup_id) return;
+            if (!matchupGroups[matchup.matchup_id]) {
+                matchupGroups[matchup.matchup_id] = [];
+            }
+            matchupGroups[matchup.matchup_id].push(matchup);
+        });
+        
+        // Determine winner for each matchup (higher points wins)
+        for (const [matchupId, teams] of Object.entries(matchupGroups)) {
+            if (teams.length !== 2) continue;
+            
+            const team1 = teams[0];
+            const team2 = teams[1];
+            
+            // Only score completed matchups (both teams have points)
+            if (team1.points > 0 || team2.points > 0) {
+                winners[matchupId] = team1.points > team2.points ? team1.roster_id : team2.roster_id;
+            }
+        }
+        
+        return winners;
+    } catch (error) {
+        console.error('Failed to get week results:', error);
+        return {};
+    }
+}
+
+const LEAGUE_ID = '1241399095898152960';
 
 async function getFileFromGitHub(path) {
     const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}?ref=${BRANCH}`;
