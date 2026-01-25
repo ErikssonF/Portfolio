@@ -512,8 +512,12 @@ function getBroadcasterUrl(broadcaster, competition) {
         }
     };
     
+    console.log(`getBroadcasterUrl called: broadcaster="${broadcaster}", competition="${competition}"`);
+    const result = urls[broadcaster]?.[competition] || urls[broadcaster]?.baseUrl || null;
+    console.log(`Returning URL: ${result}`);
+    
     // Return league-specific URL or fallback to base URL
-    return urls[broadcaster]?.[competition] || urls[broadcaster]?.baseUrl || null;
+    return result;
 }
 
 async function openStreamingService(competition) {
