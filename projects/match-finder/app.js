@@ -239,12 +239,24 @@ function createMatchesByBroadcaster(matches) {
                     ${broadcasterBadge}
                     <span class="match-count">${broadcasterMatches.length} ${broadcasterMatches.length === 1 ? 'match' : 'matches'}</span>
                 </div>
-                <div class="matches-grid" id="${groupId}">
-                    ${liveMatches.length > 0 ? liveMatches.map(match => createCompactMatchCard(match)).join('') : ''}
+                <div id="${groupId}">
+                    ${liveMatches.length > 0 ? `
+                        <div class="matches-grid">
+                            ${liveMatches.map(match => createCompactMatchCard(match)).join('')}
+                        </div>
+                    ` : ''}
                     ${liveMatches.length > 0 && upcomingMatches.length > 0 ? '<div class="match-divider"></div>' : ''}
-                    ${upcomingMatches.length > 0 ? upcomingMatches.map(match => createCompactMatchCard(match)).join('') : ''}
+                    ${upcomingMatches.length > 0 ? `
+                        <div class="matches-grid">
+                            ${upcomingMatches.map(match => createCompactMatchCard(match)).join('')}
+                        </div>
+                    ` : ''}
                     ${upcomingMatches.length > 0 && finishedMatches.length > 0 ? '<div class="match-divider"></div>' : ''}
-                    ${finishedMatches.length > 0 ? finishedMatches.map(match => createCompactMatchCard(match)).join('') : ''}
+                    ${finishedMatches.length > 0 ? `
+                        <div class="matches-grid">
+                            ${finishedMatches.map(match => createCompactMatchCard(match)).join('')}
+                        </div>
+                    ` : ''}
                 </div>
             </div>
         `;
