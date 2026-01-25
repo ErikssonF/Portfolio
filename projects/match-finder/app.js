@@ -145,36 +145,57 @@ async function getStartingSoonMatches() {
 
 // Get tomorrow's matches
 async function getTomorrowsMatches() {
-    const allMatches = await api.getUpcomingMatches();
-    const now = new Date();
-    const tomorrow = new Date(now);
+    const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0);
+    const tomorrowDate = tomorrow.toISOString().split('T')[0];
     
-    const dayAfter = new Date(tomorrow);
-    dayAfter.setDate(dayAfter.getDate() + 1);
+    console.log(`Fetching ALL matches for tomorrow: ${tomorrowDate}`);
     
-    return allMatches.filter(match => {
-        const matchTime = new Date(match.date);
-        return matchTime >= tomorrow && matchTime < dayAfter;
+    const allMatches = await api.makeRequest(`/fixtures?date=${tomorrowDate}`);
+    
+    console.log(`Total matches for ${tomorrowDate}: ${allMatches.response?.length || 0}`);
+    
+    // Filter for PL & CL
+    const filtered = (allMatches.response || []).filter(match => {
+        const leagueId = match.league?.id;
+        return leagueId === 39 || leagueId === 2;
     });
+    
+    const plCount = filtered.filter(m => m.league?.id === 39).length;
+    const clCount = filtered.filter(m => m.league?.id === 2).length;
+    
+    console.log(`Tomorrow filtered - Premier League: ${plCount}, Champions League: ${clCount}`);
+    
+    return filtered.map(m => api.formatMatch(m));
 }
 
-// Get matches in the next week
+// Get matches in the next week (day after tomorrow to +7 days)
 async function getThisWeeksMatches() {
-    const allMatches = await api.getUpcomingMatches();
-    const now = new Date();
-    const dayAfterTomorrow = new Date(now);
+    const dayAfterTomorrow = new Date();
     dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
-    dayAfterTomorrow.setHours(0, 0, 0, 0);
+    const fromDate = dayAfterTomorrow.toISOString().split('T')[0];
     
-    const weekFromNow = new Date(now);
+    const weekFromNow = new Date();
     weekFromNow.setDate(weekFromNow.getDate() + 7);
+    const toDate = weekFromNow.toISOString().split('T')[0];
     
-    return allMatches.filter(match => {
-        const matchTime = new Date(match.date);
-        return matchTime >= dayAfterTomorrow && matchTime <= weekFromNow;
+    console.log(`Fetching ALL matches from ${fromDate} to ${toDate}`);
+    
+    const allMatches = await api.makeRequest(`/fixtures?from=${fromDate}&to=${toDate}`);
+    
+    console.log(`Total matches in range: ${allMatches.response?.length || 0}`);
+    
+    // Filter for PL & CL
+    const filtered = (allMatches.response || []).filter(match => {
+        const leagueId = match.league?.id;
+        return leagueId === 39 || leagueId === 2;
     });
+    
+    console.log(`This week filtered - PL & CL: ${filtered.length}`);
+    
+    return filtered.map(m => api.formatMatch(m)).sort((a, b) => 
+        new Date(a.datetime) - new Date(b.datetime)
+    );
 }
 
 function displayMatches(matches) {
