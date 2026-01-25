@@ -177,7 +177,6 @@ async function getTomorrowsMatches() {
     
     return [...formattedFootball, ...formattedNFL];
 }
-}
 
 function displayMatches(matches) {
     if (matches.length === 0) {
