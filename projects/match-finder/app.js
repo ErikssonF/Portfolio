@@ -297,6 +297,23 @@ function groupMatchesByBroadcaster(matches) {
         }
     });
     
+    // Sort matches within each group: live first, then upcoming, then finished
+    Object.values(sorted).forEach(group => {
+        group.matches.sort((a, b) => {
+            const statusA = getStatusClass(a.status);
+            const statusB = getStatusClass(b.status);
+            
+            // Priority: live > upcoming > finished
+            const priority = { live: 0, upcoming: 1, finished: 2 };
+            const diff = priority[statusA] - priority[statusB];
+            
+            if (diff !== 0) return diff;
+            
+            // Same status: sort by time
+            return new Date(a.datetime) - new Date(b.datetime);
+        });
+    });
+    
     return sorted;
 }
 
