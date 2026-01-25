@@ -227,6 +227,11 @@ function createMatchesByBroadcaster(matches) {
             ? `<a href="${broadcasterUrl}" target="_blank" class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${displayLabel}</a>`
             : `<span class="broadcaster-badge ${isViaplayPL ? '' : 'service-' + broadcaster.toLowerCase().replace(/\s+/g, '')}">${displayLabel}</span>`;
         
+        // Separate matches by status
+        const liveMatches = broadcasterMatches.filter(m => getStatusClass(m.status) === 'live');
+        const upcomingMatches = broadcasterMatches.filter(m => getStatusClass(m.status) === 'upcoming');
+        const finishedMatches = broadcasterMatches.filter(m => getStatusClass(m.status) === 'finished');
+        
         html += `
             <div class="broadcaster-group">
                 <div class="broadcaster-header" data-toggle="${groupId}">
@@ -235,7 +240,11 @@ function createMatchesByBroadcaster(matches) {
                     <span class="match-count">${broadcasterMatches.length} ${broadcasterMatches.length === 1 ? 'match' : 'matches'}</span>
                 </div>
                 <div class="matches-grid" id="${groupId}">
-                    ${broadcasterMatches.map(match => createCompactMatchCard(match)).join('')}
+                    ${liveMatches.length > 0 ? liveMatches.map(match => createCompactMatchCard(match)).join('') : ''}
+                    ${liveMatches.length > 0 && upcomingMatches.length > 0 ? '<div class="match-divider"></div>' : ''}
+                    ${upcomingMatches.length > 0 ? upcomingMatches.map(match => createCompactMatchCard(match)).join('') : ''}
+                    ${upcomingMatches.length > 0 && finishedMatches.length > 0 ? '<div class="match-divider"></div>' : ''}
+                    ${finishedMatches.length > 0 ? finishedMatches.map(match => createCompactMatchCard(match)).join('') : ''}
                 </div>
             </div>
         `;

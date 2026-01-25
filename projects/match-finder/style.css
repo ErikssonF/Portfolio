@@ -282,6 +282,13 @@ a.broadcaster-badge:hover {
     font-weight: 500;
 }
 
+.match-divider {
+    grid-column: 1 / -1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #334155, transparent);
+    margin: 12px 0;
+}
+
 /* Grid layout for compact cards */
 .matches-grid {
     display: grid;
