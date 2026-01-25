@@ -79,6 +79,18 @@ async function loadMatchups() {
         matchupsData = data.matchups;
         
         weekTitle.textContent = `Week ${currentWeek}`;
+        
+        // Check if week is locked
+        const isLocked = await checkWeekLocked(currentWeek);
+        if (isLocked) {
+            weekTitle.innerHTML = `Week ${currentWeek} <span style="color: #ef4444; font-size: 0.8em;">🔒 LOCKED</span>`;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Week Locked';
+            matchupsContainer.innerHTML = '<div class="loading">⚠️ This week is locked - games have started!</div>';
+            statusSpan.textContent = 'Week locked';
+            return;
+        }
+        
         displayMatchups(matchupsData);
         
         statusSpan.textContent = 'Ready';
@@ -87,6 +99,15 @@ async function loadMatchups() {
         console.error('Failed to load matchups:', error);
         matchupsContainer.innerHTML = '<div class="loading">Error loading matchups</div>';
         statusSpan.textContent = 'Error';
+    }
+}
+
+async function checkWeekLocked(week) {
+    try {
+        // Week is locked if any matchup has points > 0
+        return matchupsData.some(m => m.team1.points > 0 || m.team2.points > 0);
+    } catch (error) {
+        return false;
     }
 }
 
@@ -188,11 +209,12 @@ async function submitPicks() {
             })
         });
         
+        const result = await response.json();
+        
         if (!response.ok) {
-            throw new Error('Failed to save picks');
+            throw new Error(result.error || 'Failed to save picks');
         }
         
-        const result = await response.json();
         statusSpan.textContent = 'Picks submitted!';
         alert('Picks submitted successfully!');
         
@@ -203,7 +225,7 @@ async function submitPicks() {
     } catch (error) {
         console.error('Failed to submit picks:', error);
         statusSpan.textContent = 'Submission failed';
-        alert('Failed to submit picks. Please try again.');
+        alert(error.message || 'Failed to submit picks. Please try again.');
         submitBtn.disabled = false;
     }
 }

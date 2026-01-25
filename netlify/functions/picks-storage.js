@@ -45,6 +45,17 @@ exports.handler = async function(event, context) {
 
 async function savePicks(event, headers) {
     const { user, week, picks } = JSON.parse(event.body);
+    
+    // Check if week is locked (games have started)
+    const isLocked = await isWeekLocked(week);
+    if (isLocked) {
+        return {
+            statusCode: 403,
+            headers,
+            body: JSON.stringify({ error: 'Week is locked - games have started!' })
+        };
+    }
+    
     const filePath = `data/nfl-pickem/week-${week}.json`;
 
     // Get current file content
@@ -70,6 +81,22 @@ async function savePicks(event, headers) {
         headers,
         body: JSON.stringify({ success: true, message: 'Picks saved!' })
     };
+}
+
+async function isWeekLocked(week) {
+    const endpoint = `league/${LEAGUE_ID}/matchups/${week}`;
+    const sleeperUrl = `https://api.sleeper.app/v1/${endpoint}`;
+    
+    try {
+        const response = await fetch(sleeperUrl);
+        const matchups = await response.json();
+        
+        // Week is locked if ANY matchup has points > 0 (games started)
+        return matchups.some(m => m.points > 0);
+    } catch (error) {
+        console.error('Failed to check week lock:', error);
+        return false; // If error, allow submission
+    }
 }
 
 async function getPicks(event, headers) {
