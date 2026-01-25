@@ -50,14 +50,6 @@ class FootballAPI {
         }
     }
 
-    async loadConfig() {
-        if (!this.config) {
-            const response = await fetch('config.json');
-            this.config = await response.json();
-        }
-        return this.config;
-    }
-
     setApiKey(key) {
         this.apiKey = key;
         localStorage.setItem('footballApiKey', key);
@@ -113,7 +105,6 @@ class FootballAPI {
         // Check cache first
         const cached = this.getFromCache(endpoint);
         if (cached) {
-            console.log('Using cached data for:', endpoint);
             return cached;
         }
 
@@ -126,7 +117,6 @@ class FootballAPI {
         
         if (this.useNetlifyFunction) {
             // Use Netlify Function (production)
-            console.log('Using Netlify Function for:', endpoint);
             response = await fetch(`${this.baseURL}?endpoint=${encodeURIComponent(endpoint)}`);
         } else {
             // Direct API call (local development)
@@ -134,7 +124,6 @@ class FootballAPI {
                 throw new Error('API key not set');
             }
             
-            console.log('Direct API call for:', endpoint);
             response = await fetch(`${this.baseURL}${endpoint}`, {
                 headers: {
                     'x-apisports-key': this.apiKey
@@ -161,8 +150,6 @@ class FootballAPI {
         this.incrementRequestCount();
         this.setCache(endpoint, data);
         
-        console.log(`API request made. Remaining today: ${this.getRemainingRequests()}`);
-        
         return data;
     }
 
@@ -170,16 +157,11 @@ class FootballAPI {
     async getTodaysMatches() {
         const today = new Date().toISOString().split('T')[0];
         
-        console.log(`Fetching ALL matches for date: ${today}`);
-        
         // Fetch both football and NFL games in parallel
         const [footballMatches, nflGames] = await Promise.all([
             this.makeRequest(`/fixtures?date=${today}`),
             this.makeRequest(`/nfl/games?date=${today}`)
         ]);
-        
-        console.log(`Total football matches for ${today}: ${footballMatches.response?.length || 0}`);
-        console.log(`Total NFL games for ${today}: ${nflGames.response?.length || 0}`);
         
         // Filter football for Premier League (39) and Champions League (2)
         const filteredFootball = (footballMatches.response || []).filter(match => {
@@ -187,79 +169,11 @@ class FootballAPI {
             return leagueId === 39 || leagueId === 2;
         });
         
-        const plCount = filteredFootball.filter(m => m.league?.id === 39).length;
-        const clCount = filteredFootball.filter(m => m.league?.id === 2).length;
-        
-        console.log(`Filtered - Premier League: ${plCount}, Champions League: ${clCount}`);
-        
         // Format and combine all matches
         const formattedFootball = filteredFootball.map(m => this.formatMatch(m));
         const formattedNFL = (nflGames.response || []).map(g => this.formatNFLGame(g));
         
-        console.log(`NFL games formatted: ${formattedNFL.length}`);
-        
         return [...formattedFootball, ...formattedNFL];
-    }
-
-    // Get live matches - fetch ALL and filter client-side
-    async getLiveMatches() {
-        console.log('Fetching ALL live matches');
-        const allLive = await this.makeRequest('/fixtures?live=all');
-        
-        console.log(`Total live matches: ${allLive.response?.length || 0}`);
-        
-        // Filter for Premier League (39) and Champions League (2)
-        const filtered = (allLive.response || []).filter(match => {
-            const leagueId = match.league?.id;
-            return leagueId === 39 || leagueId === 2;
-        });
-        
-        console.log(`Filtered live - PL & CL: ${filtered.length}`);
-        
-        return filtered.map(m => this.formatMatch(m));
-    }
-
-    // Get upcoming matches (next 7 days) - fetch ALL and filter
-    async getUpcomingMatches() {
-        const today = new Date();
-        const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-        
-        const fromDate = today.toISOString().split('T')[0];
-        const toDate = nextWeek.toISOString().split('T')[0];
-
-        console.log(`Fetching ALL matches from ${fromDate} to ${toDate}`);
-
-        // Free tier: Get all matches in date range
-        const allMatches = await this.makeRequest(`/fixtures?from=${fromDate}&to=${toDate}`);
-        
-        console.log(`Total matches in range: ${allMatches.response?.length || 0}`);
-        
-        // Filter for PL & CL
-        const filtered = (allMatches.response || []).filter(match => {
-            const leagueId = match.league?.id;
-            return leagueId === 39 || leagueId === 2;
-        });
-        
-        console.log(`Filtered upcoming - PL & CL: ${filtered.length}`);
-        
-        return filtered.map(m => this.formatMatch(m)).sort((a, b) => 
-            new Date(a.datetime) - new Date(b.datetime)
-        );
-    }
-
-    combineMatches(plResponse, clResponse) {
-        const matches = [];
-        
-        if (plResponse.response) {
-            matches.push(...plResponse.response.map(m => this.formatMatch(m)));
-        }
-        
-        if (clResponse.response) {
-            matches.push(...clResponse.response.map(m => this.formatMatch(m)));
-        }
-
-        // Sort by date
-        return matches.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
     }
 
     formatMatch(apiMatch) {
@@ -281,8 +195,6 @@ class FootballAPI {
     }
 
     formatNFLGame(apiGame) {
-        console.log('NFL game raw data:', apiGame);
-        
         // Combine date and time from NFL API (time is in UTC)
         let datetime;
         if (apiGame.game.date?.time) {
@@ -307,23 +219,6 @@ class FootballAPI {
             datetime: datetime,
             venue: apiGame.game.venue?.name,
             elapsed: null // NFL doesn't have elapsed time in same format
-        };
-    }
-
-    async getStreamingInfo(competition) {
-        await this.loadConfig();
-        const rights = this.config.broadcastingRights[competition];
-        
-        if (!rights) {
-            return null;
-        }
-
-        return {
-            services: rights.services,
-            urls: rights.urls || rights.url,
-            serviceDetails: rights.services.map(name => 
-                this.config.streamingServices[name]
-            )
         };
     }
 }

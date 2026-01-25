@@ -127,31 +127,11 @@ async function loadMatches() {
     }
 }
 
-// Check if a match is currently live based on status
-function isMatchLive(status) {
-    const liveStatuses = ['1H', '2H', 'HT', 'ET', 'BT', 'P', 'LIVE'];
-    return liveStatuses.includes(status);
-}
-
-// Get matches starting within the next 30 minutes
-async function getStartingSoonMatches() {
-    const allMatches = await api.getUpcomingMatches();
-    const now = new Date();
-    const soonThreshold = new Date(now.getTime() + 30 * 60 * 1000); // 30 minutes from now
-    
-    return allMatches.filter(match => {
-        const matchTime = new Date(match.date);
-        return matchTime >= now && matchTime <= soonThreshold;
-    });
-}
-
 // Get tomorrow's matches
 async function getTomorrowsMatches() {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowDate = tomorrow.toISOString().split('T')[0];
-    
-    console.log(`Fetching ALL matches for tomorrow: ${tomorrowDate}`);
     
     // Fetch both football and NFL games in parallel
     const [footballMatches, nflGames] = await Promise.all([
@@ -159,19 +139,11 @@ async function getTomorrowsMatches() {
         api.makeRequest(`/nfl/games?date=${tomorrowDate}`)
     ]);
     
-    console.log(`Total football matches for ${tomorrowDate}: ${footballMatches.response?.length || 0}`);
-    console.log(`Total NFL games for ${tomorrowDate}: ${nflGames.response?.length || 0}`);
-    
     // Filter for PL & CL
     const filteredFootball = (footballMatches.response || []).filter(match => {
         const leagueId = match.league?.id;
         return leagueId === 39 || leagueId === 2;
     });
-    
-    const plCount = filteredFootball.filter(m => m.league?.id === 39).length;
-    const clCount = filteredFootball.filter(m => m.league?.id === 2).length;
-    
-    console.log(`Tomorrow filtered - Premier League: ${plCount}, Champions League: ${clCount}`);
     
     // Format and combine
     const formattedFootball = filteredFootball.map(m => api.formatMatch(m));
@@ -497,12 +469,8 @@ function getBroadcasterUrl(broadcaster, competition) {
         }
     };
     
-    console.log(`getBroadcasterUrl called: broadcaster="${broadcaster}", competition="${competition}"`);
-    const result = urls[broadcaster]?.[competition] || urls[broadcaster]?.baseUrl || null;
-    console.log(`Returning URL: ${result}`);
-    
     // Return league-specific URL or fallback to base URL
-    return result;
+    return urls[broadcaster]?.[competition] || urls[broadcaster]?.baseUrl || null;
 }
 
 async function openStreamingService(competition) {
@@ -519,7 +487,6 @@ async function openStreamingService(competition) {
         const url = getBroadcasterUrl(broadcaster, competition);
         
         if (url) {
-            console.log(`Opening ${broadcaster} for ${competition}: ${url}`);
             window.open(url, '_blank');
         } else {
             alert('No streaming link available for this competition.');
