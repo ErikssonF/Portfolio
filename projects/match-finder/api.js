@@ -281,6 +281,7 @@ class FootballAPI {
     }
 
     formatNFLGame(apiGame) {
+        console.log('NFL game raw data:', apiGame);
         return {
             id: apiGame.game.id,
             competition: 'NFL',
@@ -292,8 +293,8 @@ class FootballAPI {
             awayScore: apiGame.scores.away.total,
             status: apiGame.game.status.short,
             statusLong: apiGame.game.status.long,
-            datetime: apiGame.game.date.date,
-            venue: apiGame.game.venue.name,
+            datetime: apiGame.game.date?.date || apiGame.game.date,
+            venue: apiGame.game.venue?.name,
             elapsed: null // NFL doesn't have elapsed time in same format
         };
     }
