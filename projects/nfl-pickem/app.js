@@ -178,15 +178,27 @@ async function submitPicks() {
         statusSpan.textContent = 'Submitting picks...';
         submitBtn.disabled = true;
         
-        // TODO: Save to backend
-        console.log('Picks submitted:', {
-            user: currentUser,
-            week: currentWeek,
-            picks: userPicks
+        const response = await fetch('/.netlify/functions/picks-storage?action=save-picks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user: currentUser,
+                week: currentWeek,
+                picks: userPicks
+            })
         });
         
+        if (!response.ok) {
+            throw new Error('Failed to save picks');
+        }
+        
+        const result = await response.json();
         statusSpan.textContent = 'Picks submitted!';
         alert('Picks submitted successfully!');
+        
+        // Clear selections
+        document.querySelectorAll('.team.selected').forEach(t => t.classList.remove('selected'));
+        userPicks = {};
         
     } catch (error) {
         console.error('Failed to submit picks:', error);
@@ -200,8 +212,39 @@ async function loadLeaderboard() {
     const tbody = document.getElementById('leaderboard-body');
     tbody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
     
-    // TODO: Load from backend
-    setTimeout(() => {
-        tbody.innerHTML = '<tr><td colspan="5">No data yet - start making picks!</td></tr>';
-    }, 500);
+    try {
+        const response = await fetch('/.netlify/functions/picks-storage?action=get-leaderboard');
+        
+        if (!response.ok) {
+            throw new Error('Failed to load leaderboard');
+        }
+        
+        const data = await response.json();
+        
+        if (Object.keys(data).length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5">No picks submitted yet</td></tr>';
+            return;
+        }
+        
+        // Convert to array and sort by correct picks
+        const players = Object.entries(data).map(([name, stats]) => ({
+            name,
+            ...stats,
+            winPct: stats.total > 0 ? ((stats.correct / stats.total) * 100).toFixed(1) : 0
+        })).sort((a, b) => b.correct - a.correct);
+        
+        tbody.innerHTML = players.map((player, index) => `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${player.name}</td>
+                <td>${player.correct}</td>
+                <td>${player.wrong}</td>
+                <td>${player.winPct}%</td>
+            </tr>
+        `).join('');
+        
+    } catch (error) {
+        console.error('Failed to load leaderboard:', error);
+        tbody.innerHTML = '<tr><td colspan="5">Error loading leaderboard</td></tr>';
+    }
 }
