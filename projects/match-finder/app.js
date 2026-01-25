@@ -93,15 +93,13 @@ async function loadMatches() {
         
         switch(currentFilter) {
             case 'live':
-                matches = await api.getLiveMatches();
+                // Filter today's matches for live ones (no API call needed)
+                const todayMatches = await api.getTodaysMatches();
+                matches = todayMatches.filter(match => isMatchLive(match.status));
                 break;
             case 'today':
-                // Get all matches for today (live + upcoming)
-                const [liveToday, upcomingToday] = await Promise.all([
-                    api.getLiveMatches(),
-                    api.getTodaysMatches()
-                ]);
-                matches = [...liveToday, ...upcomingToday];
+                // Get all matches for today (includes live + upcoming + finished)
+                matches = await api.getTodaysMatches();
                 break;
             case 'tomorrow':
                 matches = await getTomorrowsMatches();
@@ -111,11 +109,7 @@ async function loadMatches() {
                 break;
             default:
                 // Default to today
-                const [live, upcoming] = await Promise.all([
-                    api.getLiveMatches(),
-                    api.getTodaysMatches()
-                ]);
-                matches = [...live, ...upcoming];
+                matches = await api.getTodaysMatches();
                 break;
         }
 
@@ -129,6 +123,12 @@ async function loadMatches() {
         showError(error.message || 'Failed to load matches. Please check your API key.');
         hideLoading();
     }
+}
+
+// Check if a match is currently live based on status
+function isMatchLive(status) {
+    const liveStatuses = ['1H', '2H', 'HT', 'ET', 'BT', 'P', 'LIVE'];
+    return liveStatuses.includes(status);
 }
 
 // Get matches starting within the next 30 minutes
