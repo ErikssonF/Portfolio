@@ -294,9 +294,15 @@ function createMatchesByBroadcaster(matches) {
         // Create unique ID for collapsible group
         const groupId = `group-${key.replace(/[^a-zA-Z0-9]/g, '-')}`;
         
-        const broadcasterBadge = broadcasterUrl 
-            ? `<a href="${broadcasterUrl}" target="_blank" class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${label}</a>`
-            : `<span class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${label}</span>`;
+        // Don't make Viaplay PL a link or add color
+        const isViaplayPL = broadcaster === 'Viaplay' && competition === 'Premier League';
+        
+        // Change "Not Available" to "NFL"
+        const displayLabel = label === 'Not Available' ? 'NFL' : label;
+        
+        const broadcasterBadge = broadcasterUrl && !isViaplayPL
+            ? `<a href="${broadcasterUrl}" target="_blank" class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${displayLabel}</a>`
+            : `<span class="broadcaster-badge ${isViaplayPL ? '' : 'service-' + broadcaster.toLowerCase().replace(/\s+/g, '')}">${displayLabel}</span>`;
         
         html += `
             <div class="broadcaster-group">
