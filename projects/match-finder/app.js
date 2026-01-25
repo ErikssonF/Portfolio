@@ -522,22 +522,22 @@ function getBroadcasterUrl(broadcaster, competition) {
 
 async function openStreamingService(competition) {
     try {
-        const streamingInfo = await api.getStreamingInfo(competition);
+        const services = getStreamingServicesForCompetition(competition);
         
-        if (!streamingInfo) {
+        if (!services || services.length === 0) {
             alert('No streaming information available for this competition.');
             return;
         }
 
-        // If multiple services, show options
-        if (streamingInfo.services.length > 1) {
-            const service = streamingInfo.services[0]; // Default to first
-            const serviceData = streamingInfo.serviceDetails[0];
-            window.open(serviceData.baseUrl, '_blank');
+        // If multiple services, use the first one (could add UI to choose later)
+        const broadcaster = services[0];
+        const url = getBroadcasterUrl(broadcaster, competition);
+        
+        if (url) {
+            console.log(`Opening ${broadcaster} for ${competition}: ${url}`);
+            window.open(url, '_blank');
         } else {
-            // Single service, open directly
-            const serviceData = streamingInfo.serviceDetails[0];
-            window.open(serviceData.baseUrl, '_blank');
+            alert('No streaming link available for this competition.');
         }
     } catch (error) {
         console.error('Error opening streaming service:', error);
