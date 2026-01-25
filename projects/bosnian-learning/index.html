@@ -33,9 +33,48 @@
                             <span class="stat-label">Scenarios Completed</span>
                         </div>
                         <div class="stat">
-                            <span class="stat-value" id="practice-streak">0</span>
-                            <span class="stat-label">Day Streak</span>
+                            <span class="stat-value" id="due-reviews">0</span>
+                            <span class="stat-label">Due for Review</span>
                         </div>
+                    </div>
+                    <button id="start-review-btn" class="review-btn" disabled>Start Daily Review</button>
+                </div>
+            </div>
+
+            <!-- Daily Review View -->
+            <div id="review-view" class="view">
+                <div class="conversation-header">
+                    <button id="review-back-btn" class="btn-back">← Back to Scenarios</button>
+                    <h2>Daily Review</h2>
+                </div>
+
+                <div class="review-container">
+                    <div class="review-progress">
+                        <span id="review-count">0</span> / <span id="review-total">0</span> reviewed
+                    </div>
+
+                    <div id="review-card" class="review-card">
+                        <div class="review-question" id="review-question">
+                            <!-- Question appears here -->
+                        </div>
+                        
+                        <div id="review-input-area" class="review-input">
+                            <input type="text" id="review-answer" placeholder="Type your answer..." autocomplete="off">
+                            <button id="check-answer-btn" class="btn-check">Check Answer</button>
+                        </div>
+
+                        <div id="review-result" class="review-result hidden">
+                            <!-- Result appears here -->
+                        </div>
+                    </div>
+
+                    <div id="review-complete" class="review-complete hidden">
+                        <h3>🎉 Review Complete!</h3>
+                        <div class="review-stats">
+                            <p>Correct: <strong id="correct-count">0</strong></p>
+                            <p>Needs Practice: <strong id="wrong-count">0</strong></p>
+                        </div>
+                        <button id="finish-review-btn" class="btn-primary">Back to Scenarios</button>
                     </div>
                 </div>
             </div>

@@ -300,6 +300,196 @@ footer {
     opacity: 0.9;
 }
 
+/* Review Mode Styles */
+.review-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.review-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+}
+
+.review-btn:disabled {
+    background: #334155;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.review-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.review-progress {
+    text-align: center;
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    color: #94a3b8;
+}
+
+.review-card {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 40px;
+    margin-bottom: 20px;
+}
+
+.review-question {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.review-question .direction {
+    font-size: 0.9em;
+    color: #94a3b8;
+    margin-bottom: 10px;
+}
+
+.review-question .phrase {
+    font-size: 1.8em;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.review-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.review-input input {
+    flex: 1;
+    padding: 15px;
+    background: #1e293b;
+    border: 2px solid #334155;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 1.1em;
+}
+
+.review-input input:focus {
+    outline: none;
+    border-color: #10b981;
+}
+
+.btn-check {
+    padding: 15px 30px;
+    background: #10b981;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-check:hover {
+    background: #059669;
+}
+
+.review-result {
+    text-align: center;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+}
+
+.review-result.correct {
+    background: rgba(16, 185, 129, 0.2);
+    border: 2px solid #10b981;
+}
+
+.review-result.wrong {
+    background: rgba(239, 68, 68, 0.2);
+    border: 2px solid #ef4444;
+}
+
+.review-result .result-icon {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.review-result .correct-answer {
+    margin-top: 10px;
+    color: #cbd5e1;
+}
+
+.review-result .next-btn {
+    margin-top: 15px;
+    padding: 12px 30px;
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.review-result .next-btn:hover {
+    background: #2563eb;
+}
+
+.review-complete {
+    text-align: center;
+    padding: 40px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 16px;
+}
+
+.review-complete h3 {
+    font-size: 2em;
+    color: #10b981;
+    margin-bottom: 20px;
+}
+
+.review-stats {
+    margin: 30px 0;
+    font-size: 1.2em;
+}
+
+.review-stats p {
+    margin: 10px 0;
+    color: #cbd5e1;
+}
+
+.review-stats strong {
+    color: #10b981;
+}
+
+.btn-primary {
+    padding: 15px 40px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+}
+
+.hidden {
+    display: none;
+}
+
 @media (max-width: 768px) {
     h1 {
         font-size: 2em;
