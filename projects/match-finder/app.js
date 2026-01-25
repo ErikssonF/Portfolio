@@ -497,7 +497,7 @@ function formatCompactTime(match) {
     if (diffDays === 0) return timeStr;
     
     // Tomorrow
-    if (diffDays === 1) return `Tom ${timeStr}`;
+    if (diffDays === 1) return `Tomorrow ${timeStr}`;
     
     // Future
     const dateStr = date.toLocaleDateString('sv-SE', { month: 'numeric', day: 'numeric' });
