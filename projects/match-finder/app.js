@@ -190,69 +190,9 @@ function displayMatches(matches) {
         return;
     }
 
-    // Separate live and upcoming matches
-    const liveMatches = matches.filter(m => {
-        const statusClass = getStatusClass(m.status);
-        return statusClass === 'live';
-    });
-    
-    const upcomingMatches = matches.filter(m => {
-        const statusClass = getStatusClass(m.status);
-        return statusClass === 'upcoming';
-    });
-    
-    const finishedMatches = matches.filter(m => {
-        const statusClass = getStatusClass(m.status);
-        return statusClass === 'finished';
-    });
-
-    let html = '';
-
-    // Show LIVE section first
-    if (liveMatches.length > 0) {
-        html += `
-            <div class="match-section">
-                <div class="section-header live-header">
-                    <span class="section-icon">🔴</span>
-                    <h2 class="section-title">Live Now</h2>
-                    <span class="match-count">${liveMatches.length} ${liveMatches.length === 1 ? 'match' : 'matches'}</span>
-                </div>
-                ${createMatchesByBroadcaster(liveMatches)}
-            </div>
-        `;
-    }
-
-    // Show UPCOMING section
-    if (upcomingMatches.length > 0) {
-        const sectionTitle = currentFilter === 'today' ? 'Upcoming Today' : 
-                           currentFilter === 'tomorrow' ? 'Tomorrow' :
-                           currentFilter === 'this-week' ? 'This Week' : 'Upcoming';
-        
-        html += `
-            <div class="match-section">
-                <div class="section-header">
-                    <span class="section-icon">📅</span>
-                    <h2 class="section-title">${sectionTitle}</h2>
-                    <span class="match-count">${upcomingMatches.length} ${upcomingMatches.length === 1 ? 'match' : 'matches'}</span>
-                </div>
-                ${createMatchesByBroadcaster(upcomingMatches)}
-            </div>
-        `;
-    }
-
-    // Show FINISHED section (if any)
-    if (finishedMatches.length > 0) {
-        html += `
-            <div class="match-section">
-                <div class="section-header">
-                    <span class="section-icon">✅</span>
-                    <h2 class="section-title">Finished</h2>
-                    <span class="match-count">${finishedMatches.length} ${finishedMatches.length === 1 ? 'match' : 'matches'}</span>
-                </div>
-                ${createMatchesByBroadcaster(finishedMatches)}
-            </div>
-        `;
-    }
+    // Just show all matches grouped by broadcaster/league
+    // Live matches will still have red styling on the cards themselves
+    const html = createMatchesByBroadcaster(matches);
     
     matchList.innerHTML = html;
     
