@@ -2,6 +2,7 @@
 const api = new FootballAPI();
 let currentFilter = 'today';
 let autoRefreshInterval = null;
+let loadingTimeout = null;
 
 // DOM Elements
 const matchList = document.getElementById('matchList');
@@ -82,7 +83,12 @@ function updateRateLimitDisplay() {
 }
 
 async function loadMatches() {
-    showLoading();
+    // Smart loading: Only show spinner if request takes >100ms
+    const startTime = Date.now();
+    loadingTimeout = setTimeout(() => {
+        showLoading();
+    }, 100);
+    
     hideError();
 
     // Update rate limit display before loading
@@ -105,12 +111,16 @@ async function loadMatches() {
                 break;
         }
 
+        // Cancel loading spinner if it hasn't shown yet
+        clearTimeout(loadingTimeout);
+        
         displayMatches(matches);
         updateLastUpdateTime();
         updateRateLimitDisplay(); // Update after successful request
         hideLoading();
         
     } catch (error) {
+        clearTimeout(loadingTimeout);
         console.error('Error loading matches:', error);
         showError(error.message || 'Failed to load matches. Please check your API key.');
         hideLoading();
@@ -480,6 +490,15 @@ function formatCompactTime(match) {
     const now = new Date();
     const diffMinutes = Math.floor((date - now) / (1000 * 60));
     const diffDays = Math.floor((date - now) / (1000 * 60 * 60 * 24));
+    
+    // Check if this is a valid date (NFL games might not have times)
+    const isValidDate = !isNaN(date.getTime());
+    const hasTime = isValidDate && date.getHours() !== 0 && date.getMinutes() !== 0;
+    
+    // If NFL game without time, show TBD
+    if (match.competition === 'NFL' && !hasTime) {
+        return 'TBD';
+    }
     
     const timeStr = date.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
     
