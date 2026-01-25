@@ -11,7 +11,6 @@ const errorState = document.getElementById('errorState');
 const errorText = document.getElementById('errorText');
 const apiKeyInput = document.getElementById('apiKey');
 const saveApiKeyBtn = document.getElementById('saveApiKey');
-const refreshBtn = document.getElementById('refreshBtn');
 const lastUpdateSpan = document.getElementById('lastUpdate');
 const filterBtns = document.querySelectorAll('.filter-btn');
 const apiNotice = document.querySelector('.api-notice');
@@ -47,7 +46,6 @@ function init() {
 
     // Event listeners
     saveApiKeyBtn.addEventListener('click', handleSaveApiKey);
-    refreshBtn.addEventListener('click', () => loadMatches());
     
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
