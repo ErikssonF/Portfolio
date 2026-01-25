@@ -172,27 +172,24 @@ class FootballAPI {
         
         console.log(`Fetching matches for date: ${today}`);
         
-        // FIRST: Check what seasons are actually available
-        console.log('Testing: What seasons does API have for Premier League?');
-        const seasonsTest = await this.makeRequest(`/leagues/seasons`);
-        console.log('Available seasons:', seasonsTest.response);
-        
-        // Try with next=50 to get upcoming fixtures regardless of specific date
-        console.log('Testing: Get next 50 PL fixtures (any date)');
-        const nextFixtures = await this.makeRequest(`/fixtures?league=39&season=2025&next=50`);
-        console.log('Next 50 fixtures result:', nextFixtures.response?.length || 0);
-        if (nextFixtures.response && nextFixtures.response.length > 0) {
-            console.log('First fixture date:', nextFixtures.response[0]?.fixture?.date);
-        }
-        
-        // Original date-based query
+        // Try season 2024 (2024/25 season - Aug 2024 to May 2025)
+        console.log('Trying season=2024 for today:', today);
         const [plMatches, clMatches] = await Promise.all([
-            this.makeRequest(`/fixtures?league=39&season=2025&date=${today}`),
-            this.makeRequest(`/fixtures?league=2&season=2025&date=${today}`)
+            this.makeRequest(`/fixtures?league=39&season=2024&date=${today}`),
+            this.makeRequest(`/fixtures?league=2&season=2024&date=${today}`)
         ]);
 
-        console.log(`Premier League matches found: ${plMatches.response?.length || 0}`);
-        console.log(`Champions League matches found: ${clMatches.response?.length || 0}`);
+        console.log(`Season 2024 - PL: ${plMatches.response?.length || 0}, CL: ${clMatches.response?.length || 0}`);
+        
+        // If still 0, try next=10 to see ANY upcoming fixtures
+        if ((plMatches.response?.length || 0) === 0) {
+            console.log('No matches for today, checking next 10 fixtures...');
+            const next = await this.makeRequest(`/fixtures?league=39&season=2024&next=10`);
+            console.log('Next 10 PL fixtures:', next.response?.length || 0);
+            if (next.response && next.response.length > 0) {
+                console.log('Next fixture is on:', next.response[0]?.fixture?.date);
+            }
+        }
         
         return this.combineMatches(plMatches, clMatches);
     }
