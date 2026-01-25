@@ -284,9 +284,10 @@ a.broadcaster-badge:hover {
 
 .match-divider {
     grid-column: 1 / -1;
-    height: 1px;
-    background: linear-gradient(to right, transparent, #334155, transparent);
-    margin: 12px 0;
+    height: 2px;
+    background: #334155;
+    margin: 16px 0;
+    border-radius: 1px;
 }
 
 /* Grid layout for compact cards */
