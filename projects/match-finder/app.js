@@ -491,15 +491,6 @@ function formatCompactTime(match) {
     const diffMinutes = Math.floor((date - now) / (1000 * 60));
     const diffDays = Math.floor((date - now) / (1000 * 60 * 60 * 24));
     
-    // Check if this is a valid date (NFL games might not have times)
-    const isValidDate = !isNaN(date.getTime());
-    const hasTime = isValidDate && date.getHours() !== 0 && date.getMinutes() !== 0;
-    
-    // If NFL game without time, show TBD
-    if (match.competition === 'NFL' && !hasTime) {
-        return 'TBD';
-    }
-    
     const timeStr = date.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
     
     // Live matches

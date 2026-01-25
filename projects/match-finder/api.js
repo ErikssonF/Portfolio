@@ -282,6 +282,17 @@ class FootballAPI {
 
     formatNFLGame(apiGame) {
         console.log('NFL game raw data:', apiGame);
+        
+        // Combine date and time from NFL API (time is in UTC)
+        let datetime;
+        if (apiGame.game.date?.time) {
+            // Combine date + time and add 'Z' to indicate UTC
+            datetime = `${apiGame.game.date.date}T${apiGame.game.date.time}:00Z`;
+        } else {
+            // Fallback if no time available
+            datetime = apiGame.game.date?.date || apiGame.game.date;
+        }
+        
         return {
             id: apiGame.game.id,
             competition: 'NFL',
@@ -293,7 +304,7 @@ class FootballAPI {
             awayScore: apiGame.scores.away.total,
             status: apiGame.game.status.short,
             statusLong: apiGame.game.status.long,
-            datetime: apiGame.game.date?.date || apiGame.game.date,
+            datetime: datetime,
             venue: apiGame.game.venue?.name,
             elapsed: null // NFL doesn't have elapsed time in same format
         };
