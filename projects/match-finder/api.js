@@ -170,14 +170,19 @@ class FootballAPI {
     async getTodaysMatches() {
         const today = new Date().toISOString().split('T')[0];
         
-        console.log(`=== TESTING ABSOLUTE MINIMUM API CALL ===`);
-        console.log('Call 1: Just league=39 (no other parameters)');
-        const minimalTest = await this.makeRequest(`/fixtures?league=39`);
-        console.log('Minimal call result:', minimalTest);
-        console.log('Results:', minimalTest.response?.length || 0, 'fixtures returned');
+        console.log(`Fetching matches for date: ${today}`);
         
-        // Return empty for now while we test
-        return [];
+        // Season 2025 = 2025/26 season (Aug 2025 - May 2026)
+        // Premier League ID: 39, Champions League ID: 2
+        const [plMatches, clMatches] = await Promise.all([
+            this.makeRequest(`/fixtures?league=39&season=2025&date=${today}`),
+            this.makeRequest(`/fixtures?league=2&season=2025&date=${today}`)
+        ]);
+
+        console.log(`Premier League matches found: ${plMatches.response?.length || 0}`);
+        console.log(`Champions League matches found: ${clMatches.response?.length || 0}`);
+        
+        return this.combineMatches(plMatches, clMatches);
     }
 
     // Get live matches
