@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bosnian Learning - Conversation Practice</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🇧🇦 Učimo Bosanski</h1>
+            <p class="subtitle">Learn Bosnian through real conversations</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Scenario Selection -->
+            <div id="scenario-selection" class="view active">
+                <h2>Choose a Scenario</h2>
+                <div class="scenarios-grid" id="scenarios-grid">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <div class="stats-box">
+                    <h3>Your Progress</h3>
+                    <div class="progress-stats">
+                        <div class="stat">
+                            <span class="stat-value" id="phrases-learned">0</span>
+                            <span class="stat-label">Phrases Learned</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value" id="scenarios-completed">0</span>
+                            <span class="stat-label">Scenarios Completed</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value" id="practice-streak">0</span>
+                            <span class="stat-label">Day Streak</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversation View -->
+            <div id="conversation-view" class="view">
+                <div class="conversation-header">
+                    <button id="back-btn" class="btn-back">← Back to Scenarios</button>
+                    <h2 id="scenario-title"></h2>
+                </div>
+
+                <div class="chat-container">
+                    <div id="chat-messages" class="chat-messages">
+                        <!-- Messages appear here -->
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <div id="options-container" class="options-container">
+                        <!-- Response options appear here -->
+                    </div>
+                    <div class="hint-toggle">
+                        <label>
+                            <input type="checkbox" id="show-hints" checked>
+                            Show English hints
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>💡 Tip: Click phrases to see translations • Practice daily for best results</p>
+        </footer>
+    </div>
+
+    <script src="scenarios.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
