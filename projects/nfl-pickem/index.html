@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFL Pick'em - Weekly Picks</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏈 NFL Pick'em</h1>
+            <div class="user-selection">
+                <label for="username">Select Your Name:</label>
+                <select id="username">
+                    <option value="">Choose...</option>
+                </select>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab active" data-view="picks">Make Picks</button>
+            <button class="tab" data-view="leaderboard">Leaderboard</button>
+        </nav>
+
+        <main id="content">
+            <div id="picks-view" class="view active">
+                <div class="week-header">
+                    <h2 id="week-title">Week 0</h2>
+                    <button id="submit-picks" class="btn-primary" disabled>Submit Picks</button>
+                </div>
+                
+                <div id="matchups-container" class="matchups">
+                    <div class="loading">Loading matchups...</div>
+                </div>
+            </div>
+
+            <div id="leaderboard-view" class="view">
+                <div class="leaderboard-container">
+                    <table class="leaderboard">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Player</th>
+                                <th>Correct</th>
+                                <th>Wrong</th>
+                                <th>Win %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body">
+                            <tr><td colspan="5">No data yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="status-bar">
+                <span id="status">Ready</span>
+                <span id="last-update"></span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

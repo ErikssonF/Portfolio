@@ -1,0 +1,281 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.user-selection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.user-selection label {
+    font-weight: 500;
+}
+
+#username {
+    padding: 10px 15px;
+    font-size: 1em;
+    border: 2px solid #334155;
+    background: #1e293b;
+    color: #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    min-width: 200px;
+}
+
+#username:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+.tab {
+    padding: 12px 30px;
+    background: #1e293b;
+    border: 2px solid #334155;
+    color: #94a3b8;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.tab:hover {
+    background: #334155;
+}
+
+.tab.active {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    color: #fff;
+}
+
+.view {
+    display: none;
+}
+
+.view.active {
+    display: block;
+}
+
+.week-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.week-header h2 {
+    font-size: 1.8em;
+    color: #fff;
+}
+
+.btn-primary {
+    padding: 12px 30px;
+    background: #10b981;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+.btn-primary:disabled {
+    background: #334155;
+    color: #64748b;
+    cursor: not-allowed;
+}
+
+.matchups {
+    display: grid;
+    gap: 20px;
+}
+
+.matchup-card {
+    background: #1e293b;
+    border: 2px solid #334155;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s;
+}
+
+.matchup-card:hover {
+    border-color: #475569;
+}
+
+.matchup-teams {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    align-items: center;
+}
+
+.team {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: #0f172a;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.team:hover {
+    background: #1e293b;
+    border-color: #3b82f6;
+}
+
+.team.selected {
+    background: #1e3a5f;
+    border-color: #3b82f6;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.team-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #334155;
+}
+
+.team-info {
+    flex: 1;
+}
+
+.team-name {
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+.team-record {
+    font-size: 0.9em;
+    color: #94a3b8;
+}
+
+.vs-separator {
+    font-size: 1.2em;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.leaderboard-container {
+    background: #1e293b;
+    border: 2px solid #334155;
+    border-radius: 12px;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaderboard thead {
+    background: #0f172a;
+}
+
+.leaderboard th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #fff;
+    border-bottom: 2px solid #334155;
+}
+
+.leaderboard td {
+    padding: 15px;
+    border-bottom: 1px solid #334155;
+}
+
+.leaderboard tbody tr:hover {
+    background: #0f172a;
+}
+
+.leaderboard tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+    font-size: 1.1em;
+}
+
+footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #334155;
+}
+
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    color: #64748b;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    .matchup-teams {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .vs-separator {
+        text-align: center;
+    }
+    
+    .week-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+}
