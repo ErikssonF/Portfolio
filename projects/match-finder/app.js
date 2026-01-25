@@ -151,22 +151,32 @@ async function getTomorrowsMatches() {
     
     console.log(`Fetching ALL matches for tomorrow: ${tomorrowDate}`);
     
-    const allMatches = await api.makeRequest(`/fixtures?date=${tomorrowDate}`);
+    // Fetch both football and NFL games in parallel
+    const [footballMatches, nflGames] = await Promise.all([
+        api.makeRequest(`/fixtures?date=${tomorrowDate}`),
+        api.makeRequest(`/nfl/games?date=${tomorrowDate}`)
+    ]);
     
-    console.log(`Total matches for ${tomorrowDate}: ${allMatches.response?.length || 0}`);
+    console.log(`Total football matches for ${tomorrowDate}: ${footballMatches.response?.length || 0}`);
+    console.log(`Total NFL games for ${tomorrowDate}: ${nflGames.response?.length || 0}`);
     
     // Filter for PL & CL
-    const filtered = (allMatches.response || []).filter(match => {
+    const filteredFootball = (footballMatches.response || []).filter(match => {
         const leagueId = match.league?.id;
         return leagueId === 39 || leagueId === 2;
     });
     
-    const plCount = filtered.filter(m => m.league?.id === 39).length;
-    const clCount = filtered.filter(m => m.league?.id === 2).length;
+    const plCount = filteredFootball.filter(m => m.league?.id === 39).length;
+    const clCount = filteredFootball.filter(m => m.league?.id === 2).length;
     
     console.log(`Tomorrow filtered - Premier League: ${plCount}, Champions League: ${clCount}`);
     
-    return filtered.map(m => api.formatMatch(m));
+    // Format and combine
+    const formattedFootball = filteredFootball.map(m => api.formatMatch(m));
+    const formattedNFL = (nflGames.response || []).map(g => api.formatNFLGame(g));
+    
+    return [...formattedFootball, ...formattedNFL];
+}
 }
 
 function displayMatches(matches) {
@@ -488,7 +498,8 @@ function getStreamingServicesForCompetition(competition) {
     // This is a simplified mapping - in production, this would come from config.json
     const mapping = {
         'Premier League': ['Viaplay'],
-        'UEFA Champions League': ['C More', 'Viaplay']
+        'UEFA Champions League': ['C More', 'Viaplay'],
+        'NFL': [] // No Swedish broadcaster
     };
     
     return mapping[competition] || [];

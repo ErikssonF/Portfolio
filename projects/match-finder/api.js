@@ -172,23 +172,33 @@ class FootballAPI {
         
         console.log(`Fetching ALL matches for date: ${today}`);
         
-        // Free tier: Get all matches for date (no league/season filter)
-        const allMatches = await this.makeRequest(`/fixtures?date=${today}`);
+        // Fetch both football and NFL games in parallel
+        const [footballMatches, nflGames] = await Promise.all([
+            this.makeRequest(`/fixtures?date=${today}`),
+            this.makeRequest(`/nfl/games?date=${today}`)
+        ]);
         
-        console.log(`Total matches for ${today}: ${allMatches.response?.length || 0}`);
+        console.log(`Total football matches for ${today}: ${footballMatches.response?.length || 0}`);
+        console.log(`Total NFL games for ${today}: ${nflGames.response?.length || 0}`);
         
-        // Filter client-side for Premier League (39) and Champions League (2)
-        const filtered = (allMatches.response || []).filter(match => {
+        // Filter football for Premier League (39) and Champions League (2)
+        const filteredFootball = (footballMatches.response || []).filter(match => {
             const leagueId = match.league?.id;
             return leagueId === 39 || leagueId === 2;
         });
         
-        const plCount = filtered.filter(m => m.league?.id === 39).length;
-        const clCount = filtered.filter(m => m.league?.id === 2).length;
+        const plCount = filteredFootball.filter(m => m.league?.id === 39).length;
+        const clCount = filteredFootball.filter(m => m.league?.id === 2).length;
         
         console.log(`Filtered - Premier League: ${plCount}, Champions League: ${clCount}`);
         
-        return filtered.map(m => this.formatMatch(m));
+        // Format and combine all matches
+        const formattedFootball = filteredFootball.map(m => this.formatMatch(m));
+        const formattedNFL = (nflGames.response || []).map(g => this.formatNFLGame(g));
+        
+        console.log(`NFL games formatted: ${formattedNFL.length}`);
+        
+        return [...formattedFootball, ...formattedNFL];
     }
 
     // Get live matches - fetch ALL and filter client-side
@@ -267,6 +277,24 @@ class FootballAPI {
             datetime: apiMatch.fixture.date,
             venue: apiMatch.fixture.venue.name,
             elapsed: apiMatch.fixture.status.elapsed
+        };
+    }
+
+    formatNFLGame(apiGame) {
+        return {
+            id: apiGame.game.id,
+            competition: 'NFL',
+            homeTeam: apiGame.teams.home.name,
+            awayTeam: apiGame.teams.away.name,
+            homeLogo: apiGame.teams.home.logo,
+            awayLogo: apiGame.teams.away.logo,
+            homeScore: apiGame.scores.home.total,
+            awayScore: apiGame.scores.away.total,
+            status: apiGame.game.status.short,
+            statusLong: apiGame.game.status.long,
+            datetime: apiGame.game.date.date,
+            venue: apiGame.game.venue.name,
+            elapsed: null // NFL doesn't have elapsed time in same format
         };
     }
 

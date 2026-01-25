@@ -146,8 +146,14 @@ exports.handler = async (event, context) => {
   }
   
   try {
-    // Make request to API-Football
-    const apiUrl = `https://v3.football.api-sports.io${endpoint}`;
+    // Determine which API to use based on endpoint
+    let apiUrl;
+    if (endpoint.includes('/nfl/') || endpoint.includes('american-football')) {
+      apiUrl = `https://v1.american-football.api-sports.io${endpoint.replace('/nfl', '')}`;
+    } else {
+      apiUrl = `https://v3.football.api-sports.io${endpoint}`;
+    }
+    
     console.log(`Fetching from API: ${apiUrl}`);
     
     const response = await fetch(apiUrl, {
