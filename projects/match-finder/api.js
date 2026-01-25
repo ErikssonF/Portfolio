@@ -166,45 +166,50 @@ class FootballAPI {
         return data;
     }
 
-    // Get today's matches for Premier League and Champions League
+    // Get today's matches - fetch ALL and filter client-side
     async getTodaysMatches() {
         const today = new Date().toISOString().split('T')[0];
         
-        console.log(`Fetching matches for date: ${today}`);
+        console.log(`Fetching ALL matches for date: ${today}`);
         
-        // Try season 2024 (2024/25 season - Aug 2024 to May 2025)
-        console.log('Trying season=2024 for today:', today);
-        const [plMatches, clMatches] = await Promise.all([
-            this.makeRequest(`/fixtures?league=39&season=2024&date=${today}`),
-            this.makeRequest(`/fixtures?league=2&season=2024&date=${today}`)
-        ]);
-
-        console.log(`Season 2024 - PL: ${plMatches.response?.length || 0}, CL: ${clMatches.response?.length || 0}`);
+        // Free tier: Get all matches for date (no league/season filter)
+        const allMatches = await this.makeRequest(`/fixtures?date=${today}`);
         
-        // If still 0, try next=10 to see ANY upcoming fixtures
-        if ((plMatches.response?.length || 0) === 0) {
-            console.log('No matches for today, checking next 10 fixtures...');
-            const next = await this.makeRequest(`/fixtures?league=39&season=2024&next=10`);
-            console.log('Next 10 PL fixtures:', next.response?.length || 0);
-            if (next.response && next.response.length > 0) {
-                console.log('Next fixture is on:', next.response[0]?.fixture?.date);
-            }
-        }
+        console.log(`Total matches for ${today}: ${allMatches.response?.length || 0}`);
         
-        return this.combineMatches(plMatches, clMatches);
+        // Filter client-side for Premier League (39) and Champions League (2)
+        const filtered = (allMatches.response || []).filter(match => {
+            const leagueId = match.league?.id;
+            return leagueId === 39 || leagueId === 2;
+        });
+        
+        const plCount = filtered.filter(m => m.league?.id === 39).length;
+        const clCount = filtered.filter(m => m.league?.id === 2).length;
+        
+        console.log(`Filtered - Premier League: ${plCount}, Champions League: ${clCount}`);
+        
+        return filtered.map(m => this.formatMatch(m));
     }
 
-    // Get live matches
+    // Get live matches - fetch ALL and filter client-side
     async getLiveMatches() {
-        const [plMatches, clMatches] = await Promise.all([
-            this.makeRequest('/fixtures?league=39&live=all'),
-            this.makeRequest('/fixtures?league=2&live=all')
-        ]);
-
-        return this.combineMatches(plMatches, clMatches);
+        console.log('Fetching ALL live matches');
+        const allLive = await this.makeRequest('/fixtures?live=all');
+        
+        console.log(`Total live matches: ${allLive.response?.length || 0}`);
+        
+        // Filter for Premier League (39) and Champions League (2)
+        const filtered = (allLive.response || []).filter(match => {
+            const leagueId = match.league?.id;
+            return leagueId === 39 || leagueId === 2;
+        });
+        
+        console.log(`Filtered live - PL & CL: ${filtered.length}`);
+        
+        return filtered.map(m => this.formatMatch(m));
     }
 
-    // Get upcoming matches (next 7 days)
+    // Get upcoming matches (next 7 days) - fetch ALL and filter
     async getUpcomingMatches() {
         const today = new Date();
         const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
@@ -212,18 +217,24 @@ class FootballAPI {
         const fromDate = today.toISOString().split('T')[0];
         const toDate = nextWeek.toISOString().split('T')[0];
 
-        console.log(`Fetching upcoming matches from ${fromDate} to ${toDate}`);
+        console.log(`Fetching ALL matches from ${fromDate} to ${toDate}`);
 
-        // Season 2025 = 2025/26 season (Aug 2025 - May 2026)
-        const [plMatches, clMatches] = await Promise.all([
-            this.makeRequest(`/fixtures?league=39&season=2025&from=${fromDate}&to=${toDate}`),
-            this.makeRequest(`/fixtures?league=2&season=2025&from=${fromDate}&to=${toDate}`)
-        ]);
-
-        console.log(`Premier League upcoming: ${plMatches.response?.length || 0}`);
-        console.log(`Champions League upcoming: ${clMatches.response?.length || 0}`);
-
-        return this.combineMatches(plMatches, clMatches);
+        // Free tier: Get all matches in date range
+        const allMatches = await this.makeRequest(`/fixtures?from=${fromDate}&to=${toDate}`);
+        
+        console.log(`Total matches in range: ${allMatches.response?.length || 0}`);
+        
+        // Filter for PL & CL
+        const filtered = (allMatches.response || []).filter(match => {
+            const leagueId = match.league?.id;
+            return leagueId === 39 || leagueId === 2;
+        });
+        
+        console.log(`Filtered upcoming - PL & CL: ${filtered.length}`);
+        
+        return filtered.map(m => this.formatMatch(m)).sort((a, b) => 
+            new Date(a.datetime) - new Date(b.datetime)
+        );
     }
 
     combineMatches(plResponse, clResponse) {
