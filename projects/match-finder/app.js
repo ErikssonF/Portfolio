@@ -259,13 +259,20 @@ function createMatchesByBroadcaster(matches) {
     const grouped = groupMatchesByBroadcaster(matches);
     let html = '';
     
-    for (const [broadcaster, broadcasterMatches] of Object.entries(grouped)) {
-        // Get the league-specific URL for this broadcaster
-        const broadcasterUrl = getBroadcasterUrl(broadcaster, broadcasterMatches[0]?.competition);
+    for (const [key, groupData] of Object.entries(grouped)) {
+        const { broadcaster, competition, matches: broadcasterMatches } = groupData;
+        
+        // Get the league-specific URL for this broadcaster + competition combo
+        const broadcasterUrl = getBroadcasterUrl(broadcaster, competition);
+        
+        // Create label with broadcaster and competition
+        const label = competition 
+            ? `${broadcaster} - ${competition.replace('UEFA ', '')}`
+            : broadcaster;
         
         const broadcasterBadge = broadcasterUrl 
-            ? `<a href="${broadcasterUrl}" target="_blank" class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${broadcaster}</a>`
-            : `<span class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${broadcaster}</span>`;
+            ? `<a href="${broadcasterUrl}" target="_blank" class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${label}</a>`
+            : `<span class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${label}</span>`;
         
         html += `
             <div class="broadcaster-group">
@@ -291,31 +298,48 @@ function groupMatchesByBroadcaster(matches) {
         
         if (!services || services.length === 0) {
             // No broadcaster info
-            if (!groups['Not Available']) groups['Not Available'] = [];
-            groups['Not Available'].push(match);
+            const key = 'Not Available';
+            if (!groups[key]) groups[key] = { broadcaster: 'Not Available', competition: null, matches: [] };
+            groups[key].matches.push(match);
         } else {
-            // Add to each broadcaster's group
+            // Add to each broadcaster's group, separated by competition
             services.forEach(service => {
-                if (!groups[service]) groups[service] = [];
-                groups[service].push(match);
+                const key = `${service}|${match.competition}`;
+                if (!groups[key]) {
+                    groups[key] = { 
+                        broadcaster: service, 
+                        competition: match.competition, 
+                        matches: [] 
+                    };
+                }
+                groups[key].matches.push(match);
             });
         }
     });
     
-    // Sort groups: Viaplay, C More, Max, Prime, then others
+    // Sort groups: Viaplay first, then C More, then others
     const order = ['Viaplay', 'C More', 'Max', 'Prime Video'];
     const sorted = {};
     
+    // Sort by broadcaster priority, then by competition
     order.forEach(service => {
-        if (groups[service]) {
-            sorted[service] = groups[service];
-        }
+        Object.keys(groups)
+            .filter(key => groups[key].broadcaster === service)
+            .sort((a, b) => {
+                // Premier League before Champions League
+                if (groups[a].competition === 'Premier League') return -1;
+                if (groups[b].competition === 'Premier League') return 1;
+                return 0;
+            })
+            .forEach(key => {
+                sorted[key] = groups[key];
+            });
     });
     
     // Add remaining groups
-    Object.keys(groups).forEach(service => {
-        if (!sorted[service]) {
-            sorted[service] = groups[service];
+    Object.keys(groups).forEach(key => {
+        if (!sorted[key]) {
+            sorted[key] = groups[key];
         }
     });
     
