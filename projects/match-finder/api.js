@@ -172,8 +172,20 @@ class FootballAPI {
         
         console.log(`Fetching matches for date: ${today}`);
         
-        // Season 2025 = 2025/26 season (Aug 2025 - May 2026)
-        // Premier League ID: 39, Champions League ID: 2
+        // FIRST: Check what seasons are actually available
+        console.log('Testing: What seasons does API have for Premier League?');
+        const seasonsTest = await this.makeRequest(`/leagues/seasons`);
+        console.log('Available seasons:', seasonsTest.response);
+        
+        // Try with next=50 to get upcoming fixtures regardless of specific date
+        console.log('Testing: Get next 50 PL fixtures (any date)');
+        const nextFixtures = await this.makeRequest(`/fixtures?league=39&season=2025&next=50`);
+        console.log('Next 50 fixtures result:', nextFixtures.response?.length || 0);
+        if (nextFixtures.response && nextFixtures.response.length > 0) {
+            console.log('First fixture date:', nextFixtures.response[0]?.fixture?.date);
+        }
+        
+        // Original date-based query
         const [plMatches, clMatches] = await Promise.all([
             this.makeRequest(`/fixtures?league=39&season=2025&date=${today}`),
             this.makeRequest(`/fixtures?league=2&season=2025&date=${today}`)
