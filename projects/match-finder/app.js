@@ -260,10 +260,17 @@ function createMatchesByBroadcaster(matches) {
     let html = '';
     
     for (const [broadcaster, broadcasterMatches] of Object.entries(grouped)) {
+        // Get the league-specific URL for this broadcaster
+        const broadcasterUrl = getBroadcasterUrl(broadcaster, broadcasterMatches[0]?.competition);
+        
+        const broadcasterBadge = broadcasterUrl 
+            ? `<a href="${broadcasterUrl}" target="_blank" class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${broadcaster}</a>`
+            : `<span class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${broadcaster}</span>`;
+        
         html += `
             <div class="broadcaster-group">
                 <div class="broadcaster-header">
-                    <span class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${broadcaster}</span>
+                    ${broadcasterBadge}
                     <span class="match-count">${broadcasterMatches.length} ${broadcasterMatches.length === 1 ? 'match' : 'matches'}</span>
                 </div>
                 <div class="matches-grid">
@@ -461,6 +468,28 @@ function getStreamingServicesForCompetition(competition) {
     };
     
     return mapping[competition] || [];
+}
+
+function getBroadcasterUrl(broadcaster, competition) {
+    // Map broadcaster and competition to league-specific URLs
+    const urls = {
+        'Viaplay': {
+            'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
+            'UEFA Champions League': 'https://viaplay.se/sport/fotboll/champions-league'
+        },
+        'C More': {
+            'UEFA Champions League': 'https://www.cmore.se/sport/fotboll/champions-league'
+        },
+        'Max': {
+            'baseUrl': 'https://www.max.com/se'
+        },
+        'Prime Video': {
+            'baseUrl': 'https://www.primevideo.com'
+        }
+    };
+    
+    // Return league-specific URL or fallback to base URL
+    return urls[broadcaster]?.[competition] || urls[broadcaster]?.baseUrl || null;
 }
 
 async function openStreamingService(competition) {
