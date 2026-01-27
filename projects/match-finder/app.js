@@ -486,7 +486,7 @@ function getStreamingServicesForCompetition(competition) {
     // This is a simplified mapping - in production, this would come from config.json
     const mapping = {
         'Premier League': ['Viaplay'],
-        'UEFA Champions League': ['C More', 'Viaplay'],
+        'UEFA Champions League': ['C More & Viaplay'], // Combined broadcaster
         'NFL': [] // No Swedish broadcaster
     };
     
@@ -495,6 +495,13 @@ function getStreamingServicesForCompetition(competition) {
 
 function getBroadcasterUrl(broadcaster, competition) {
     // Map broadcaster and competition to league-specific URLs
+    if (competition === 'UEFA Champions League') {
+        return 'https://www.cmore.se/fotboll/uefa-champions-league'; // C More has primary CL rights
+    }
+    
+    // No link for Premier League (Viaplay)
+    return null;
+}
     const urls = {
         'Viaplay': {
             'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
