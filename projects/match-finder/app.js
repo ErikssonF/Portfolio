@@ -502,25 +502,6 @@ function getBroadcasterUrl(broadcaster, competition) {
     // No link for Premier League (Viaplay)
     return null;
 }
-    const urls = {
-        'Viaplay': {
-            'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
-            'UEFA Champions League': 'https://viaplay.se/sport/fotboll/champions-league'
-        },
-        'C More': {
-            'UEFA Champions League': 'https://www.cmore.se/sport/fotboll/champions-league'
-        },
-        'Max': {
-            'baseUrl': 'https://www.max.com/se'
-        },
-        'Prime Video': {
-            'baseUrl': 'https://www.primevideo.com'
-        }
-    };
-    
-    // Return league-specific URL or fallback to base URL
-    return urls[broadcaster]?.[competition] || urls[broadcaster]?.baseUrl || null;
-}
 
 async function openStreamingService(competition) {
     try {
