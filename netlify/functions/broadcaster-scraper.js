@@ -48,6 +48,8 @@ function parseTeamName(text) {
     .replace(/A\.?F\.?C\.?$/gi, '')
     .replace(/United$/i, '')
     .replace(/City$/i, '')
+    .replace(/FK\s+/gi, '')  // Remove FK prefix
+    .replace(/KV\s+/gi, '')  // Remove KV prefix
     .trim();
 }
 
@@ -56,7 +58,7 @@ function createMatchKey(homeTeam, awayTeam) {
   const normalize = (name) => name
     .toLowerCase()
     .replace(/\s+/g, '')
-    .replace(/[.-]/g, '');
+    .replace(/[.-\/]/g, '');  // Also remove slashes
   
   return `${normalize(homeTeam)}-${normalize(awayTeam)}`;
 }
@@ -140,6 +142,7 @@ async function scrapeBroadcasters(competition, date) {
             broadcaster,
             channel: fullChannelName  // Store the specific channel name
           };
+          console.log(`Scraped: ${homeTeam} vs ${awayTeam} -> key: ${matchKey} -> ${fullChannelName}`);
         }
       }
     });

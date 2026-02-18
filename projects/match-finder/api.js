@@ -207,7 +207,7 @@ class FootballAPI {
         const normalize = (name) => name
             .toLowerCase()
             .replace(/\s+/g, '')
-            .replace(/[.-]/g, '');
+            .replace(/[.-\/]/g, '');  // Also remove slashes
         
         return `${normalize(homeTeam)}-${normalize(awayTeam)}`;
     }
@@ -219,6 +219,8 @@ class FootballAPI {
         
         // Get broadcaster from map if available
         const broadcasterInfo = broadcasterMap[matchKey];
+        
+        console.log(`API Match: ${homeTeam} vs ${awayTeam} -> key: ${matchKey} -> found: ${broadcasterInfo ? broadcasterInfo.channel : 'NOT FOUND'}`);
         
         return {
             id: apiMatch.fixture.id,
