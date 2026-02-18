@@ -67,11 +67,14 @@ async function scrapeBroadcasters(competition, date) {
   
   const url = competitionUrls[competition];
   if (!url) {
+    console.log('No URL for competition:', competition);
     return {};
   }
   
   try {
+    console.log('Scraping:', url);
     const html = await fetchHtml(url);
+    console.log('HTML length:', html.length);
     const broadcasters = {};
     
     // Look for patterns like:
@@ -82,6 +85,8 @@ async function scrapeBroadcasters(competition, date) {
     const matchBlocks = html.match(/<article[^>]*>.*?<\/article>/gs) || 
                        html.match(/<div[^>]*class="[^"]*match[^"]*"[^>]*>.*?<\/div>/gs) ||
                        [];
+    
+    console.log('Found match blocks:', matchBlocks.length);
     
     matchBlocks.forEach(block => {
       // Extract team names (various patterns)
@@ -107,6 +112,8 @@ async function scrapeBroadcasters(competition, date) {
             broadcaster = 'C More';
           }
         }
+        
+        console.log('Found match:', { homeTeam, awayTeam, broadcaster });
         
         const matchKey = createMatchKey(homeTeam, awayTeam);
         broadcasters[matchKey] = {
