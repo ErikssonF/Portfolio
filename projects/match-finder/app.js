@@ -217,8 +217,11 @@ function createMatchesByBroadcaster(matches) {
         // Don't make Viaplay PL a link or add color
         const isViaplayPL = broadcaster === 'Viaplay' && competition === 'Premier League';
         
-        // Change "Not Available" to "NFL", and Viaplay PL to just "Premier League"
-        let displayLabel = label === 'Not Available' ? 'NFL' : label;
+        // Change label for sports without broadcasters
+        let displayLabel = label;
+        if (broadcaster === 'Not Available' && competition) {
+            displayLabel = competition;
+        }
         if (isViaplayPL) {
             displayLabel = 'Premier League';
         }
@@ -269,12 +272,18 @@ function groupMatchesByBroadcaster(matches) {
     const groups = {};
     
     matches.forEach(match => {
-        const services = getStreamingServicesForCompetition(match.competition);
+        const services = getStreamingServicesForCompetition(match.competition, match);
         
         if (!services || services.length === 0) {
-            // No broadcaster info
-            const key = 'Not Available';
-            if (!groups[key]) groups[key] = { broadcaster: 'Not Available', competition: null, matches: [] };
+            // No broadcaster info - use competition as key
+            const key = match.competition || 'Not Available';
+            if (!groups[key]) {
+                groups[key] = { 
+                    broadcaster: 'Not Available', 
+                    competition: match.competition, 
+                    matches: [] 
+                };
+            }
             groups[key].matches.push(match);
         } else {
             // Add to each broadcaster's group, separated by competition
@@ -482,15 +491,14 @@ function createStreamingBadges(competition) {
     return `<div class="streaming-services">${badges}</div>`;
 }
 
-function getStreamingServicesForCompetition(competition) {
-    // This is a simplified mapping - in production, this would come from config.json
-    const mapping = {
-        'Premier League': ['Viaplay'],
-        'UEFA Champions League': ['C More & Viaplay'], // Combined broadcaster
-        'NFL': [] // No Swedish broadcaster
-    };
+function getStreamingServicesForCompetition(competition, match = null) {
+    // Use broadcaster data from scraping (via match.broadcaster)
+    if (match && match.broadcaster) {
+        return [match.broadcaster];
+    }
     
-    return mapping[competition] || [];
+    // No broadcaster info available
+    return [];
 }
 
 function getBroadcasterUrl(broadcaster, competition) {
@@ -501,25 +509,6 @@ function getBroadcasterUrl(broadcaster, competition) {
     
     // No link for Premier League (Viaplay)
     return null;
-}
-    const urls = {
-        'Viaplay': {
-            'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
-            'UEFA Champions League': 'https://viaplay.se/sport/fotboll/champions-league'
-        },
-        'C More': {
-            'UEFA Champions League': 'https://www.cmore.se/sport/fotboll/champions-league'
-        },
-        'Max': {
-            'baseUrl': 'https://www.max.com/se'
-        },
-        'Prime Video': {
-            'baseUrl': 'https://www.primevideo.com'
-        }
-    };
-    
-    // Return league-specific URL or fallback to base URL
-    return urls[broadcaster]?.[competition] || urls[broadcaster]?.baseUrl || null;
 }
 
 async function openStreamingService(competition) {

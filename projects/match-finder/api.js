@@ -236,6 +236,7 @@ class FootballAPI {
         };
     }
 
+
     formatNFLGame(apiGame) {
         // Combine date and time from NFL API (time is in UTC)
         let datetime;
