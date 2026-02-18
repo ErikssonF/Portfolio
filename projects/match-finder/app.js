@@ -172,6 +172,8 @@ function displayMatches(matches) {
             const competition = card.dataset.competition;
             const broadcaster = card.dataset.broadcaster;
             
+            console.log('Match clicked:', { competition, broadcaster });
+            
             // Reconstruct minimal match object with broadcaster info
             const match = { 
                 competition: competition,
@@ -545,6 +547,8 @@ async function openStreamingService(competition, match = null) {
     try {
         const services = getStreamingServicesForCompetition(competition, match);
         
+        console.log('Opening streaming service:', { competition, match, services });
+        
         if (!services || services.length === 0) {
             alert('No streaming information available for this competition.');
             return;
@@ -553,6 +557,8 @@ async function openStreamingService(competition, match = null) {
         // If multiple services, use the first one (could add UI to choose later)
         const broadcaster = services[0];
         const url = getBroadcasterUrl(broadcaster, competition);
+        
+        console.log('Broadcaster URL:', { broadcaster, competition, url });
         
         if (url) {
             window.open(url, '_blank');
