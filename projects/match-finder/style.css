@@ -268,8 +268,6 @@ h1 {
     text-decoration: none;
     display: inline-block;
     transition: transform 0.2s, opacity 0.2s;
-    color: #ffffff;
-}
 }
 
 a.broadcaster-badge:hover {

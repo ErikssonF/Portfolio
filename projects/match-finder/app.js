@@ -97,11 +97,10 @@ async function loadMatches() {
         
         switch(currentFilter) {
             case 'today':
-                // Get all matches for today (PL, CL, NFL)
+                // Get all matches for today (includes live + upcoming + finished)
                 matches = await api.getTodaysMatches();
                 break;
             case 'tomorrow':
-                // Get all matches for tomorrow
                 matches = await getTomorrowsMatches();
                 break;
             default:
@@ -132,16 +131,11 @@ async function getTomorrowsMatches() {
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowDate = tomorrow.toISOString().split('T')[0];
     
-    // Fetch football, NFL games, and broadcaster info in parallel
-    const [footballMatches, nflGames, plBroadcasters, clBroadcasters] = await Promise.all([
+    // Fetch both football and NFL games in parallel
+    const [footballMatches, nflGames] = await Promise.all([
         api.makeRequest(`/fixtures?date=${tomorrowDate}`),
-        api.makeRequest(`/nfl/games?date=${tomorrowDate}`),
-        api.getBroadcasters('Premier League', tomorrowDate),
-        api.getBroadcasters('UEFA Champions League', tomorrowDate)
+        api.makeRequest(`/nfl/games?date=${tomorrowDate}`)
     ]);
-    
-    // Combine broadcaster data
-    const broadcasterMap = { ...plBroadcasters, ...clBroadcasters };
     
     // Filter for PL & CL
     const filteredFootball = (footballMatches.response || []).filter(match => {
@@ -149,8 +143,8 @@ async function getTomorrowsMatches() {
         return leagueId === 39 || leagueId === 2;
     });
     
-    // Format and combine with broadcaster info
-    const formattedFootball = filteredFootball.map(m => api.formatMatch(m, broadcasterMap));
+    // Format and combine
+    const formattedFootball = filteredFootball.map(m => api.formatMatch(m));
     const formattedNFL = (nflGames.response || []).map(g => api.formatNFLGame(g));
     
     return [...formattedFootball, ...formattedNFL];
@@ -176,11 +170,7 @@ function displayMatches(matches) {
     document.querySelectorAll('.match-card').forEach(card => {
         card.addEventListener('click', () => {
             const competition = card.dataset.competition;
-            const matchDatetime = card.dataset.datetime;
-            
-            // Reconstruct minimal match object for broadcaster detection
-            const match = { datetime: matchDatetime, competition: competition };
-            openStreamingService(competition, match);
+            openStreamingService(competition);
         });
     });
     
@@ -227,11 +217,8 @@ function createMatchesByBroadcaster(matches) {
         // Don't make Viaplay PL a link or add color
         const isViaplayPL = broadcaster === 'Viaplay' && competition === 'Premier League';
         
-        // Change "Not Available" to show competition name (e.g., "NFL")
-        let displayLabel = label;
-        if (broadcaster === 'Not Available' && competition) {
-            displayLabel = competition;
-        }
+        // Change "Not Available" to "NFL", and Viaplay PL to just "Premier League"
+        let displayLabel = label === 'Not Available' ? 'NFL' : label;
         if (isViaplayPL) {
             displayLabel = 'Premier League';
         }
@@ -282,18 +269,12 @@ function groupMatchesByBroadcaster(matches) {
     const groups = {};
     
     matches.forEach(match => {
-        const services = getStreamingServicesForCompetition(match.competition, match);
+        const services = getStreamingServicesForCompetition(match.competition);
         
         if (!services || services.length === 0) {
-            // No broadcaster info - use competition as key if available
-            const key = match.competition || 'Not Available';
-            if (!groups[key]) {
-                groups[key] = { 
-                    broadcaster: 'Not Available', 
-                    competition: match.competition, 
-                    matches: [] 
-                };
-            }
+            // No broadcaster info
+            const key = 'Not Available';
+            if (!groups[key]) groups[key] = { broadcaster: 'Not Available', competition: null, matches: [] };
             groups[key].matches.push(match);
         } else {
             // Add to each broadcaster's group, separated by competition
@@ -301,7 +282,7 @@ function groupMatchesByBroadcaster(matches) {
                 const key = `${service}|${match.competition}`;
                 if (!groups[key]) {
                     groups[key] = { 
-                        broadcaster: service,
+                        broadcaster: service, 
                         competition: match.competition, 
                         matches: [] 
                     };
@@ -362,7 +343,7 @@ function createMatchCard(match) {
     const statusText = getStatusText(match);
     
     return `
-        <div class="match-card ${statusClass}" data-competition="${match.competition}" data-datetime="${match.datetime}">
+        <div class="match-card ${statusClass}" data-competition="${match.competition}">
             <span class="match-status ${statusClass}">${statusText}</span>
             <div class="competition">${match.competition}</div>
             
@@ -384,7 +365,7 @@ function createMatchCard(match) {
             
             <div class="match-time">${formatMatchTime(match)}</div>
             
-            ${createStreamingBadges(match.competition, match)}
+            ${createStreamingBadges(match.competition)}
         </div>
     `;
 }
@@ -396,7 +377,7 @@ function createCompactMatchCard(match) {
     const isLive = statusClass === 'live';
     
     return `
-        <div class="match-card compact ${statusClass}" data-competition="${match.competition}" data-datetime="${match.datetime}">
+        <div class="match-card compact ${statusClass}" data-competition="${match.competition}">
             <div class="compact-header">
                 <span class="match-status-mini ${statusClass}">${isLive ? '🔴' : ''}</span>
                 <span class="match-time-mini">${formatCompactTime(match)}</span>
@@ -487,8 +468,8 @@ function formatCompactTime(match) {
     return `${dateStr} ${timeStr}`;
 }
 
-function createStreamingBadges(competition, match = null) {
-    const streamingInfo = getStreamingServicesForCompetition(competition, match);
+function createStreamingBadges(competition) {
+    const streamingInfo = getStreamingServicesForCompetition(competition);
     
     if (!streamingInfo || streamingInfo.length === 0) {
         return '<div class="streaming-services"><span style="color: #94a3b8; font-size: 0.9em;">Broadcasting info not available</span></div>';
@@ -501,48 +482,49 @@ function createStreamingBadges(competition, match = null) {
     return `<div class="streaming-services">${badges}</div>`;
 }
 
-function getStreamingServicesForCompetition(competition, match = null) {
-    // Use broadcaster data from scraping (via match.broadcaster)
-    if (match && match.broadcaster) {
-        return [match.broadcaster];
-    }
+function getStreamingServicesForCompetition(competition) {
+    // This is a simplified mapping - in production, this would come from config.json
+    const mapping = {
+        'Premier League': ['Viaplay'],
+        'UEFA Champions League': ['C More & Viaplay'], // Combined broadcaster
+        'NFL': [] // No Swedish broadcaster
+    };
     
-    // No fallback - if we don't have broadcaster data, return empty
-    return [];
+    return mapping[competition] || [];
 }
 
 function getBroadcasterUrl(broadcaster, competition) {
     // Map broadcaster and competition to league-specific URLs
-    const broadcasterUrls = {
+    if (competition === 'UEFA Champions League') {
+        return 'https://www.cmore.se/fotboll/uefa-champions-league'; // C More has primary CL rights
+    }
+    
+    // No link for Premier League (Viaplay)
+    return null;
+}
+    const urls = {
         'Viaplay': {
             'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
             'UEFA Champions League': 'https://viaplay.se/sport/fotboll/champions-league'
         },
         'C More': {
-            'UEFA Champions League': 'https://www.cmore.se/fotboll/uefa-champions-league'
-        },
-        'C More': {
-            'UEFA Champions League': 'https://www.cmore.se/fotboll/uefa-champions-league'
-        },
-        'Prime Video': {
-            'Premier League': 'https://www.primevideo.com/region/eu/storefront/sports'
+            'UEFA Champions League': 'https://www.cmore.se/sport/fotboll/champions-league'
         },
         'Max': {
-            'Premier League': 'https://www.max.com/se/sv/sports'
+            'baseUrl': 'https://www.max.com/se'
+        },
+        'Prime Video': {
+            'baseUrl': 'https://www.primevideo.com'
         }
     };
     
-    // Try to get broadcaster-specific URL
-    if (broadcasterUrls[broadcaster] && broadcasterUrls[broadcaster][competition]) {
-        return broadcasterUrls[broadcaster][competition];
-    }
-    
-    return null;
+    // Return league-specific URL or fallback to base URL
+    return urls[broadcaster]?.[competition] || urls[broadcaster]?.baseUrl || null;
 }
 
-async function openStreamingService(competition, match = null) {
+async function openStreamingService(competition) {
     try {
-        const services = getStreamingServicesForCompetition(competition, match);
+        const services = getStreamingServicesForCompetition(competition);
         
         if (!services || services.length === 0) {
             alert('No streaming information available for this competition.');
