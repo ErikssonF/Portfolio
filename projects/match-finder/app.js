@@ -98,8 +98,13 @@ async function loadMatches() {
         switch(currentFilter) {
             case 'premier-league':
                 // Get today's Premier League matches only
-                matches = await api.getTodaysMatches();
-                matches = matches.filter(m => m.competition === 'Premier League');
+                const todayMatchesPL = await api.getTodaysMatches();
+                matches = todayMatchesPL.filter(m => m.competition === 'Premier League');
+                break;
+            case 'champions-league':
+                // Get today's Champions League matches only
+                const todayMatchesCL = await api.getTodaysMatches();
+                matches = todayMatchesCL.filter(m => m.competition === 'UEFA Champions League');
                 break;
             case 'today':
                 // Get all matches for today (PL, CL, NFL)
@@ -110,13 +115,13 @@ async function loadMatches() {
                 break;
             case 'nfl':
                 // Get today's NFL matches only
-                matches = await api.getTodaysMatches();
-                matches = matches.filter(m => m.competition === 'NFL');
+                const todayMatchesNFL = await api.getTodaysMatches();
+                matches = todayMatchesNFL.filter(m => m.competition === 'NFL');
                 break;
             default:
                 // Default to Premier League
-                matches = await api.getTodaysMatches();
-                matches = matches.filter(m => m.competition === 'Premier League');
+                const defaultMatches = await api.getTodaysMatches();
+                matches = defaultMatches.filter(m => m.competition === 'Premier League');
                 break;
         }
 
