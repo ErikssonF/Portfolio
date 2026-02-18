@@ -151,13 +151,14 @@ h1 {
 }
 
 .match-list {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 20px;
 }
 
-.match-card {
-    background: #1e293b;
-    border: 1px solid #334155;
+.broadcaster-group {
+    margin-bottom: 0;
+}
     border-radius: 14px;
     padding: 20px;
     transition: all 0.3s;
@@ -232,8 +233,12 @@ h1 {
 
 /* Broadcaster groups */
 .broadcaster-group {
-    margin-bottom: 20px;
+    margin-bottom: 0;
 }
+
+.match-card {
+    background: #1e293b;
+    border: 1px solid #334155;
 
 .broadcaster-header {
     display: flex;
