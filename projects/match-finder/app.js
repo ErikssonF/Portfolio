@@ -401,6 +401,7 @@ function createCompactMatchCard(match) {
             <div class="compact-header">
                 <span class="match-status-mini ${statusClass}">${isLive ? '🔴' : ''}</span>
                 <span class="match-time-mini">${formatCompactTime(match)}</span>
+                ${match.channel ? `<span class="channel-badge">${match.channel}</span>` : ''}
             </div>
             <div class="compact-teams">
                 <div class="compact-team">

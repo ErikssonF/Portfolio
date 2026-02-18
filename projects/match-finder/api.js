@@ -234,7 +234,8 @@ class FootballAPI {
             datetime: apiMatch.fixture.date,
             venue: apiMatch.fixture.venue.name,
             elapsed: apiMatch.fixture.status.elapsed,
-            broadcaster: broadcasterInfo?.broadcaster || null
+            broadcaster: broadcasterInfo?.broadcaster || null,
+            channel: broadcasterInfo?.channel || null  // Add specific channel name
         };
     }
 

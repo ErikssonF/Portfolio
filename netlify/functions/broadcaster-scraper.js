@@ -130,13 +130,15 @@ async function scrapeBroadcasters(competition, date) {
           // Get the first channel (primary broadcaster)
           const channelInfo = channelMatches[0];
           const channelText = channelInfo[1] || channelInfo[2] || '';
-          const broadcaster = mapBroadcasterName(channelText.replace(/\s*logo$/i, '').trim());
+          const fullChannelName = channelText.replace(/\s*logo$/i, '').trim();
+          const broadcaster = mapBroadcasterName(fullChannelName);
           
           const matchKey = createMatchKey(homeTeam, awayTeam);
           broadcasters[matchKey] = {
             homeTeam,
             awayTeam,
-            broadcaster
+            broadcaster,
+            channel: fullChannelName  // Store the specific channel name
           };
         }
       }

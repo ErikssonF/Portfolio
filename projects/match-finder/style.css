@@ -185,6 +185,8 @@ h1 {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .match-status-mini {
@@ -196,6 +198,16 @@ h1 {
     color: #94a3b8;
     font-size: 0.85em;
     font-weight: 500;
+}
+
+.channel-badge {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 .compact-teams {
