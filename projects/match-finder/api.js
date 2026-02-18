@@ -165,6 +165,8 @@ class FootballAPI {
             this.getBroadcasters('UEFA Champions League', today)
         ]);
         
+        console.log('Broadcaster data from scraping:', { plBroadcasters, clBroadcasters });
+        
         // Combine broadcaster data
         const broadcasterMap = { ...plBroadcasters, ...clBroadcasters };
         
@@ -217,6 +219,8 @@ class FootballAPI {
         
         // Get broadcaster from map if available
         const broadcasterInfo = broadcasterMap[matchKey];
+        
+        console.log('Formatting match:', { homeTeam, awayTeam, matchKey, broadcasterInfo, hasMap: Object.keys(broadcasterMap).length });
         
         return {
             id: apiMatch.fixture.id,
