@@ -227,8 +227,11 @@ function createMatchesByBroadcaster(matches) {
         // Don't make Viaplay PL a link or add color
         const isViaplayPL = broadcaster === 'Viaplay' && competition === 'Premier League';
         
-        // Change "Not Available" to "NFL", and Viaplay PL to just "Premier League"
-        let displayLabel = label === 'Not Available' ? 'NFL' : label;
+        // Change "Not Available" to show competition name (e.g., "NFL")
+        let displayLabel = label;
+        if (broadcaster === 'Not Available' && competition) {
+            displayLabel = competition;
+        }
         if (isViaplayPL) {
             displayLabel = 'Premier League';
         }
@@ -282,9 +285,15 @@ function groupMatchesByBroadcaster(matches) {
         const services = getStreamingServicesForCompetition(match.competition, match);
         
         if (!services || services.length === 0) {
-            // No broadcaster info
-            const key = 'Not Available';
-            if (!groups[key]) groups[key] = { broadcaster: 'Not Available', competition: null, matches: [] };
+            // No broadcaster info - use competition as key if available
+            const key = match.competition || 'Not Available';
+            if (!groups[key]) {
+                groups[key] = { 
+                    broadcaster: 'Not Available', 
+                    competition: match.competition, 
+                    matches: [] 
+                };
+            }
             groups[key].matches.push(match);
         } else {
             // Add to each broadcaster's group, separated by competition
@@ -292,7 +301,7 @@ function groupMatchesByBroadcaster(matches) {
                 const key = `${service}|${match.competition}`;
                 if (!groups[key]) {
                     groups[key] = { 
-                        broadcaster: service, 
+                        broadcaster: service,
                         competition: match.competition, 
                         matches: [] 
                     };
