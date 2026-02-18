@@ -539,6 +539,34 @@ function getBroadcasterUrl(broadcaster, competition) {
         'TV4': {
             'UEFA Champions League': 'https://www.tv4play.se/sport',
             'Premier League': 'https://www.tv4play.se/sport'
+        },
+        'TNT Sports': {
+            'UEFA Champions League': 'https://www.discoveryplus.com/gb/show/uefa-champions-league',
+            'Premier League': 'https://www.discoveryplus.com/gb/sport',
+            'FA Cup': 'https://www.discoveryplus.com/gb/sport',
+            'Carabao Cup': 'https://www.discoveryplus.com/gb/sport'
+        },
+        'Sky Sports': {
+            'Premier League': 'https://www.skysports.com/watch/premier-league-live-on-sky',
+            'UEFA Champions League': 'https://www.skysports.com/watch',
+            'FA Cup': 'https://www.skysports.com/watch/fa-cup',
+            'Carabao Cup': 'https://www.skysports.com/watch'
+        },
+        'Discovery+': {
+            'UEFA Champions League': 'https://www.discoveryplus.com/gb/show/uefa-champions-league',
+            'Premier League': 'https://www.discoveryplus.com/gb/sport'
+        },
+        'ITV': {
+            'FA Cup': 'https://www.itv.com/watch/sport',
+            'UEFA Champions League': 'https://www.itv.com/watch/sport'
+        },
+        'BBC': {
+            'FA Cup': 'https://www.bbc.co.uk/sport/football',
+            'Carabao Cup': 'https://www.bbc.co.uk/sport/football'
+        },
+        'Channel 4': {
+            'FA Cup': 'https://www.channel4.com/programmes/live-football',
+            'Carabao Cup': 'https://www.channel4.com/programmes/live-football'
         }
     };
     

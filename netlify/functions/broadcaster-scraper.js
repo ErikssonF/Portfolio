@@ -1,5 +1,5 @@
-// Netlify Function to scrape broadcaster info from tvmatchen.nu
-// Uses simple regex parsing similar to finance-news approach
+// Netlify Function to scrape broadcaster info from wheresthematch.com
+// Extracts UK broadcaster information for Champions League, FA Cup, and Carabao Cup
 
 const https = require('https');
 
@@ -41,11 +41,13 @@ function fetchHtml(url) {
 }
 
 function parseTeamName(text) {
-  // Clean up team names
+  // Clean up team names - remove common suffixes and normalize
   return text
     .replace(/\s+/g, ' ')
-    .replace(/F\.?C\.?/gi, 'FC')
-    .replace(/A\.?F\.?C\.?/gi, 'AFC')
+    .replace(/F\.?C\.?$/gi, '')
+    .replace(/A\.?F\.?C\.?$/gi, '')
+    .replace(/United$/i, '')
+    .replace(/City$/i, '')
     .trim();
 }
 
@@ -59,10 +61,37 @@ function createMatchKey(homeTeam, awayTeam) {
   return `${normalize(homeTeam)}-${normalize(awayTeam)}`;
 }
 
+function mapBroadcasterName(channelText) {
+  // Map UK broadcaster names to consistent format
+  if (/TNT\s*Sports/i.test(channelText)) {
+    return 'TNT Sports';
+  }
+  if (/Sky\s*Sports/i.test(channelText)) {
+    return 'Sky Sports';
+  }
+  if (/Prime|Amazon/i.test(channelText)) {
+    return 'Prime Video';
+  }
+  if (/Discovery\+|Discovery\s*Plus/i.test(channelText)) {
+    return 'Discovery+';
+  }
+  if (/ITV/i.test(channelText)) {
+    return 'ITV';
+  }
+  if (/BBC/i.test(channelText)) {
+    return 'BBC';
+  }
+  if (/Channel\s*4/i.test(channelText)) {
+    return 'Channel 4';
+  }
+  return channelText;
+}
+
 async function scrapeBroadcasters(competition, date) {
   const competitionUrls = {
-    'Premier League': 'https://www.tvmatchen.nu/fotboll/premier-league',
-    'UEFA Champions League': 'https://www.tvmatchen.nu/fotboll/champions-league'
+    'UEFA Champions League': 'https://www.wheresthematch.com/live-champions-league-football-on-tv/',
+    'FA Cup': 'https://www.wheresthematch.com/live-fa-cup-football-on-tv/',
+    'Carabao Cup': 'https://www.wheresthematch.com/carabao-cup-on-tv/'
   };
   
   const url = competitionUrls[competition];
@@ -74,46 +103,42 @@ async function scrapeBroadcasters(competition, date) {
     const html = await fetchHtml(url);
     const broadcasters = {};
     
-    // Look for patterns like:
-    // <team>Wolves</team> ... <team>Arsenal</team> ... <channel>Prime Video</channel>
-    // Or variations with Viaplay, C More, etc.
+    // Match table rows containing match information
+    // Pattern: <tr> ... team names ... channel images ... </tr>
+    const rowPattern = /<tr[^>]*itemscope[^>]*>.*?<\/tr>/gs;
+    const rows = html.match(rowPattern) || [];
     
-    // Match blocks that contain team info and broadcaster
-    const matchBlocks = html.match(/<article[^>]*>.*?<\/article>/gs) || 
-                       html.match(/<div[^>]*class="[^"]*match[^"]*"[^>]*>.*?<\/div>/gs) ||
-                       [];
-    
-    matchBlocks.forEach(block => {
-      // Extract team names (various patterns)
-      const homeMatch = block.match(/<span[^>]*class="[^"]*(?:home|team-1)[^"]*"[^>]*>([^<]+)<\/span>/i) ||
-                       block.match(/data-home(?:-team)?="([^"]+)"/i);
-      const awayMatch = block.match(/<span[^>]*class="[^"]*(?:away|team-2)[^"]*"[^>]*>([^<]+)<\/span>/i) ||
-                       block.match(/data-away(?:-team)?="([^"]+)"/i);
+    rows.forEach(row => {
+      // Skip advertisement rows
+      if (row.includes('WATCH TODAY') || row.includes('SKY DEALS')) {
+        return;
+      }
       
-      // Extract broadcaster
-      const broadcasterMatch = block.match(/<span[^>]*class="[^"]*(?:channel|broadcaster)[^"]*"[^>]*>([^<]+)<\/span>/i) ||
-                              block.match(/Viaplay|Prime\s*Video|C\s*More|Amazon/i);
+      // Extract team names from links
+      // Pattern: <a title="Team Name on TV" ... > <em>Team Name</em></a>
+      const teamMatches = [...row.matchAll(/<a[^>]*title="([^"]+)\s+on\s+TV"[^>]*>\s*<em[^>]*>([^<]+)<\/em>/gi)];
       
-      if (homeMatch && awayMatch) {
-        const homeTeam = parseTeamName(homeMatch[1]);
-        const awayTeam = parseTeamName(awayMatch[1]);
-        let broadcaster = 'Viaplay'; // Default
+      if (teamMatches.length >= 2) {
+        const homeTeam = parseTeamName(teamMatches[0][2]);
+        const awayTeam = parseTeamName(teamMatches[1][2]);
         
-        if (broadcasterMatch) {
-          const bText = broadcasterMatch[1] || broadcasterMatch[0];
-          if (/Prime|Amazon/i.test(bText)) {
-            broadcaster = 'Prime Video';
-          } else if (/C\s*More/i.test(bText)) {
-            broadcaster = 'C More';
-          }
+        // Extract broadcaster from channel images
+        // Pattern: <img ... alt="TNT Sports 1 logo" title="TNT Sports 1" />
+        const channelMatches = [...row.matchAll(/<img[^>]*class="[^"]*channel[^"]*"[^>]*(?:alt="([^"]+)"|title="([^"]+)")[^>]*>/gi)];
+        
+        if (channelMatches.length > 0) {
+          // Get the first channel (primary broadcaster)
+          const channelInfo = channelMatches[0];
+          const channelText = channelInfo[1] || channelInfo[2] || '';
+          const broadcaster = mapBroadcasterName(channelText.replace(/\s*logo$/i, '').trim());
+          
+          const matchKey = createMatchKey(homeTeam, awayTeam);
+          broadcasters[matchKey] = {
+            homeTeam,
+            awayTeam,
+            broadcaster
+          };
         }
-        
-        const matchKey = createMatchKey(homeTeam, awayTeam);
-        broadcasters[matchKey] = {
-          homeTeam,
-          awayTeam,
-          broadcaster
-        };
       }
     });
     
