@@ -516,11 +516,13 @@ function getStreamingServicesForCompetition(competition, match = null) {
 }
 
 function getBroadcasterUrl(broadcaster, competition) {
+    console.log('getBroadcasterUrl called with:', { broadcaster, competition });
+    
     // Map broadcaster and competition to league-specific URLs
     const broadcasterUrls = {
         'Viaplay': {
             'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
-            'UEFA Champions League': 'https://viaplay.se/sport/fotboll/champions-league'
+            'UEFA Champions League': 'https://viaplay.se/sport/fotboll/uefa-champions-league'
         },
         'C More': {
             'UEFA Champions League': 'https://www.cmore.se/fotboll/uefa-champions-league',
@@ -541,8 +543,11 @@ function getBroadcasterUrl(broadcaster, competition) {
     };
     
     // Try to get broadcaster-specific URL
-    if (broadcasterUrls[broadcaster] && broadcasterUrls[broadcaster][competition]) {
-        return broadcasterUrls[broadcaster][competition];
+    const url = broadcasterUrls[broadcaster]?.[competition];
+    console.log('Resolved URL:', url);
+    
+    if (url) {
+        return url;
     }
     
     return null;
