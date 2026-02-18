@@ -170,10 +170,13 @@ function displayMatches(matches) {
     document.querySelectorAll('.match-card').forEach(card => {
         card.addEventListener('click', () => {
             const competition = card.dataset.competition;
-            const matchDatetime = card.dataset.datetime;
+            const broadcaster = card.dataset.broadcaster;
             
-            // Reconstruct minimal match object for broadcaster detection
-            const match = { datetime: matchDatetime, competition: competition };
+            // Reconstruct minimal match object with broadcaster info
+            const match = { 
+                competition: competition,
+                broadcaster: broadcaster || null
+            };
             openStreamingService(competition, match);
         });
     });
@@ -390,7 +393,7 @@ function createCompactMatchCard(match) {
     const isLive = statusClass === 'live';
     
     return `
-        <div class="match-card compact ${statusClass}" data-competition="${match.competition}" data-datetime="${match.datetime}">
+        <div class="match-card compact ${statusClass}" data-competition="${match.competition}" data-broadcaster="${match.broadcaster || ''}">
             <div class="compact-header">
                 <span class="match-status-mini ${statusClass}">${isLive ? '🔴' : ''}</span>
                 <span class="match-time-mini">${formatCompactTime(match)}</span>
