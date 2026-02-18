@@ -218,7 +218,12 @@ class FootballAPI {
         const matchKey = this.createMatchKey(homeTeam, awayTeam);
         
         // Get broadcaster from map if available
-        const broadcasterInfo = broadcasterMap[matchKey];
+        let broadcasterInfo = broadcasterMap[matchKey];
+        
+        // If exact match fails, try fuzzy matching
+        if (!broadcasterInfo) {
+            broadcasterInfo = this.fuzzyMatchBroadcaster(homeTeam, awayTeam, broadcasterMap);
+        }
         
         console.log(`API Match: ${homeTeam} vs ${awayTeam} -> key: ${matchKey} -> found: ${broadcasterInfo ? broadcasterInfo.channel : 'NOT FOUND'}`);
         
@@ -239,6 +244,42 @@ class FootballAPI {
             broadcaster: broadcasterInfo?.broadcaster || null,
             channel: broadcasterInfo?.channel || null  // Add specific channel name
         };
+    }
+
+    fuzzyMatchBroadcaster(homeTeam, awayTeam, broadcasterMap) {
+        // Extract significant words from team names
+        const getKeyWords = (name) => {
+            const stopWords = ['fc', 'afc', 'united', 'city', 'fk', 'kv', 'cf', 'sc', 'ac', 'as', 'de', 'la'];
+            return name
+                .toLowerCase()
+                .replace(/[^a-z\s]/g, '') // Remove special chars
+                .split(/\s+/)
+                .filter(word => word.length > 3 && !stopWords.includes(word));
+        };
+        
+        const homeKeyWords = getKeyWords(homeTeam);
+        const awayKeyWords = getKeyWords(awayTeam);
+        
+        // Try to find a match in the broadcaster map
+        for (const [key, info] of Object.entries(broadcasterMap)) {
+            const scrapedHomeWords = getKeyWords(info.homeTeam);
+            const scrapedAwayWords = getKeyWords(info.awayTeam);
+            
+            // Check if key words overlap for both teams
+            const homeMatch = homeKeyWords.some(word => 
+                scrapedHomeWords.some(sw => sw.includes(word) || word.includes(sw))
+            );
+            const awayMatch = awayKeyWords.some(word => 
+                scrapedAwayWords.some(sw => sw.includes(word) || word.includes(sw))
+            );
+            
+            if (homeMatch && awayMatch) {
+                console.log(`Fuzzy matched: ${homeTeam} vs ${awayTeam} with ${info.homeTeam} vs ${info.awayTeam}`);
+                return info;
+            }
+        }
+        
+        return null;
     }
 
 
