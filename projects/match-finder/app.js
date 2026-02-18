@@ -492,19 +492,13 @@ function createStreamingBadges(competition, match = null) {
 }
 
 function getStreamingServicesForCompetition(competition, match = null) {
-    // If match has broadcaster data from scraping, use it
+    // Use broadcaster data from scraping (via match.broadcaster)
     if (match && match.broadcaster) {
         return [match.broadcaster];
     }
     
-    // Fallback to defaults
-    const mapping = {
-        'Premier League': ['Viaplay'],
-        'UEFA Champions League': ['C More & Viaplay'],
-        'NFL': []
-    };
-    
-    return mapping[competition] || [];
+    // No fallback - if we don't have broadcaster data, return empty
+    return [];
 }
 
 function getBroadcasterUrl(broadcaster, competition) {
@@ -517,7 +511,7 @@ function getBroadcasterUrl(broadcaster, competition) {
         'C More': {
             'UEFA Champions League': 'https://www.cmore.se/fotboll/uefa-champions-league'
         },
-        'C More & Viaplay': {
+        'C More': {
             'UEFA Champions League': 'https://www.cmore.se/fotboll/uefa-champions-league'
         },
         'Prime Video': {
