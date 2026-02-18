@@ -495,11 +495,30 @@ function getStreamingServicesForCompetition(competition) {
 
 function getBroadcasterUrl(broadcaster, competition) {
     // Map broadcaster and competition to league-specific URLs
-    if (competition === 'UEFA Champions League') {
-        return 'https://www.cmore.se/fotboll/uefa-champions-league'; // C More has primary CL rights
+    const broadcasterUrls = {
+        'Viaplay': {
+            'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
+            'UEFA Champions League': 'https://viaplay.se/sport/fotboll/champions-league'
+        },
+        'C More': {
+            'UEFA Champions League': 'https://www.cmore.se/fotboll/uefa-champions-league'
+        },
+        'C More & Viaplay': {
+            'UEFA Champions League': 'https://www.cmore.se/fotboll/uefa-champions-league'
+        },
+        'Prime Video': {
+            'Premier League': 'https://www.primevideo.com/region/eu/storefront/sports'
+        },
+        'Max': {
+            'Premier League': 'https://www.max.com/se/sv/sports'
+        }
+    };
+    
+    // Try to get broadcaster-specific URL
+    if (broadcasterUrls[broadcaster] && broadcasterUrls[broadcaster][competition]) {
+        return broadcasterUrls[broadcaster][competition];
     }
     
-    // No link for Premier League (Viaplay)
     return null;
 }
 
