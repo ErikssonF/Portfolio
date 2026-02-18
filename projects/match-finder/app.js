@@ -506,8 +506,13 @@ function getStreamingServicesForCompetition(competition, match = null) {
         return [match.broadcaster];
     }
     
-    // No broadcaster info available
-    return [];
+    // Fallback to defaults while scraper is being fixed
+    const fallbacks = {
+        'Premier League': ['Viaplay'],
+        'UEFA Champions League': ['Viaplay']
+    };
+    
+    return fallbacks[competition] || [];
 }
 
 function getBroadcasterUrl(broadcaster, competition) {
