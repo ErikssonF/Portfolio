@@ -208,50 +208,27 @@ function createMatchesByBroadcaster(matches) {
     let html = '';
     
     for (const [key, groupData] of Object.entries(grouped)) {
-        const { broadcaster, competition, matches: broadcasterMatches } = groupData;
+        const { competition, matches: competitionMatches } = groupData;
         
-        // Get the league-specific URL for this broadcaster + competition combo
-        const broadcasterUrl = getBroadcasterUrl(broadcaster, competition);
-        
-        // Create label with broadcaster and competition
-        const label = competition 
-            ? `${broadcaster} - ${competition.replace('UEFA ', '')}`
-            : broadcaster;
+        // Create label - just the competition name
+        const displayLabel = competition.replace('UEFA ', '');
         
         // Create unique ID for collapsible group
         const groupId = `group-${key.replace(/[^a-zA-Z0-9]/g, '-')}`;
         
-        // Don't make Viaplay PL a link or add color
-        const isViaplayPL = broadcaster === 'Viaplay' && competition === 'Premier League';
-        const isViaplayCL = broadcaster === 'Viaplay' && competition === 'UEFA Champions League';
-        
-        // Change label for sports without broadcasters
-        let displayLabel = label;
-        if (broadcaster === 'Not Available' && competition) {
-            displayLabel = competition;
-        }
-        if (isViaplayPL) {
-            displayLabel = 'Premier League';
-        }
-        if (isViaplayCL) {
-            displayLabel = 'Champions League';
-        }
-        
-        const broadcasterBadge = broadcasterUrl && !isViaplayPL && !isViaplayCL
-            ? `<a href="${broadcasterUrl}" target="_blank" class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${displayLabel}</a>`
-            : `<span class="broadcaster-badge ${(isViaplayPL || isViaplayCL) ? '' : 'service-' + broadcaster.toLowerCase().replace(/\s+/g, '')}">${displayLabel}</span>`;
+        const competitionBadge = `<span class="broadcaster-badge">${displayLabel}</span>`;
         
         // Separate matches by status
-        const liveMatches = broadcasterMatches.filter(m => getStatusClass(m.status) === 'live');
-        const upcomingMatches = broadcasterMatches.filter(m => getStatusClass(m.status) === 'upcoming');
-        const finishedMatches = broadcasterMatches.filter(m => getStatusClass(m.status) === 'finished');
+        const liveMatches = competitionMatches.filter(m => getStatusClass(m.status) === 'live');
+        const upcomingMatches = competitionMatches.filter(m => getStatusClass(m.status) === 'upcoming');
+        const finishedMatches = competitionMatches.filter(m => getStatusClass(m.status) === 'finished');
         
         html += `
             <div class="broadcaster-group">
                 <div class="broadcaster-header" data-toggle="${groupId}">
                     <span class="collapse-icon">▼</span>
-                    ${broadcasterBadge}
-                    <span class="match-count">${broadcasterMatches.length} ${broadcasterMatches.length === 1 ? 'match' : 'matches'}</span>
+                    ${competitionBadge}
+                    <span class="match-count">${competitionMatches.length} ${competitionMatches.length === 1 ? 'match' : 'matches'}</span>
                 </div>
                 <div id="${groupId}">
                     ${liveMatches.length > 0 ? `
@@ -282,53 +259,26 @@ function createMatchesByBroadcaster(matches) {
 function groupMatchesByBroadcaster(matches) {
     const groups = {};
     
+    // Group by competition only, not by broadcaster
     matches.forEach(match => {
-        const services = getStreamingServicesForCompetition(match.competition, match);
-        
-        if (!services || services.length === 0) {
-            // No broadcaster info - use competition as key
-            const key = match.competition || 'Not Available';
-            if (!groups[key]) {
-                groups[key] = { 
-                    broadcaster: 'Not Available', 
-                    competition: match.competition, 
-                    matches: [] 
-                };
-            }
-            groups[key].matches.push(match);
-        } else {
-            // Add to each broadcaster's group, separated by competition
-            services.forEach(service => {
-                const key = `${service}|${match.competition}`;
-                if (!groups[key]) {
-                    groups[key] = { 
-                        broadcaster: service, 
-                        competition: match.competition, 
-                        matches: [] 
-                    };
-                }
-                groups[key].matches.push(match);
-            });
+        const key = match.competition || 'Other';
+        if (!groups[key]) {
+            groups[key] = { 
+                competition: match.competition, 
+                matches: [] 
+            };
         }
+        groups[key].matches.push(match);
     });
     
-    // Sort groups: Viaplay first, then C More, then others
-    const order = ['Viaplay', 'C More', 'Max', 'Prime Video'];
+    // Sort groups by competition priority
+    const competitionOrder = ['Premier League', 'UEFA Champions League', 'FA Cup', 'Carabao Cup', 'NFL'];
     const sorted = {};
     
-    // Sort by broadcaster priority, then by competition
-    order.forEach(service => {
-        Object.keys(groups)
-            .filter(key => groups[key].broadcaster === service)
-            .sort((a, b) => {
-                // Premier League before Champions League
-                if (groups[a].competition === 'Premier League') return -1;
-                if (groups[b].competition === 'Premier League') return 1;
-                return 0;
-            })
-            .forEach(key => {
-                sorted[key] = groups[key];
-            });
+    competitionOrder.forEach(comp => {
+        if (groups[comp]) {
+            sorted[comp] = groups[comp];
+        }
     });
     
     // Add remaining groups
