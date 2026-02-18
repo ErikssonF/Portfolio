@@ -225,6 +225,7 @@ function createMatchesByBroadcaster(matches) {
         
         // Don't make Viaplay PL a link or add color
         const isViaplayPL = broadcaster === 'Viaplay' && competition === 'Premier League';
+        const isViaplayCL = broadcaster === 'Viaplay' && competition === 'UEFA Champions League';
         
         // Change label for sports without broadcasters
         let displayLabel = label;
@@ -234,10 +235,13 @@ function createMatchesByBroadcaster(matches) {
         if (isViaplayPL) {
             displayLabel = 'Premier League';
         }
+        if (isViaplayCL) {
+            displayLabel = 'Champions League';
+        }
         
-        const broadcasterBadge = broadcasterUrl && !isViaplayPL
+        const broadcasterBadge = broadcasterUrl && !isViaplayPL && !isViaplayCL
             ? `<a href="${broadcasterUrl}" target="_blank" class="broadcaster-badge service-${broadcaster.toLowerCase().replace(/\s+/g, '')}">${displayLabel}</a>`
-            : `<span class="broadcaster-badge ${isViaplayPL ? '' : 'service-' + broadcaster.toLowerCase().replace(/\s+/g, '')}">${displayLabel}</span>`;
+            : `<span class="broadcaster-badge ${(isViaplayPL || isViaplayCL) ? '' : 'service-' + broadcaster.toLowerCase().replace(/\s+/g, '')}">${displayLabel}</span>`;
         
         // Separate matches by status
         const liveMatches = broadcasterMatches.filter(m => getStatusClass(m.status) === 'live');
