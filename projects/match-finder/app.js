@@ -1,6 +1,6 @@
 // Main Application Logic
 const api = new FootballAPI();
-let currentFilter = 'premier-league';
+let currentFilter = 'today';
 let autoRefreshInterval = null;
 let loadingTimeout = null;
 
@@ -96,32 +96,17 @@ async function loadMatches() {
         let matches = [];
         
         switch(currentFilter) {
-            case 'premier-league':
-                // Get today's Premier League matches only
-                const todayMatchesPL = await api.getTodaysMatches();
-                matches = todayMatchesPL.filter(m => m.competition === 'Premier League');
-                break;
-            case 'champions-league':
-                // Get today's Champions League matches only
-                const todayMatchesCL = await api.getTodaysMatches();
-                matches = todayMatchesCL.filter(m => m.competition === 'UEFA Champions League');
-                break;
             case 'today':
                 // Get all matches for today (PL, CL, NFL)
                 matches = await api.getTodaysMatches();
                 break;
             case 'tomorrow':
+                // Get all matches for tomorrow
                 matches = await getTomorrowsMatches();
                 break;
-            case 'nfl':
-                // Get today's NFL matches only
-                const todayMatchesNFL = await api.getTodaysMatches();
-                matches = todayMatchesNFL.filter(m => m.competition === 'NFL');
-                break;
             default:
-                // Default to Premier League
-                const defaultMatches = await api.getTodaysMatches();
-                matches = defaultMatches.filter(m => m.competition === 'Premier League');
+                // Default to today
+                matches = await api.getTodaysMatches();
                 break;
         }
 
