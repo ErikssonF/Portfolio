@@ -157,11 +157,16 @@ class FootballAPI {
     async getTodaysMatches() {
         const today = new Date().toISOString().split('T')[0];
         
-        // Fetch both football and NFL games in parallel
-        const [footballMatches, nflGames] = await Promise.all([
+        // Fetch football, NFL games, and broadcaster info in parallel
+        const [footballMatches, nflGames, plBroadcasters, clBroadcasters] = await Promise.all([
             this.makeRequest(`/fixtures?date=${today}`),
-            this.makeRequest(`/nfl/games?date=${today}`)
+            this.makeRequest(`/nfl/games?date=${today}`),
+            this.getBroadcasters('Premier League', today),
+            this.getBroadcasters('UEFA Champions League', today)
         ]);
+        
+        // Combine broadcaster data
+        const broadcasterMap = { ...plBroadcasters, ...clBroadcasters };
         
         // Filter football for Premier League (39) and Champions League (2)
         const filteredFootball = (footballMatches.response || []).filter(match => {
@@ -169,19 +174,55 @@ class FootballAPI {
             return leagueId === 39 || leagueId === 2;
         });
         
-        // Format and combine all matches
-        const formattedFootball = filteredFootball.map(m => this.formatMatch(m));
+        // Format and combine all matches with broadcaster info
+        const formattedFootball = filteredFootball.map(m => this.formatMatch(m, broadcasterMap));
         const formattedNFL = (nflGames.response || []).map(g => this.formatNFLGame(g));
         
         return [...formattedFootball, ...formattedNFL];
     }
 
-    formatMatch(apiMatch) {
+    async getBroadcasters(competition, date) {
+        try {
+            const url = this.useNetlifyFunction
+                ? `/.netlify/functions/broadcaster-scraper?competition=${encodeURIComponent(competition)}&date=${date}`
+                : null;
+            
+            if (!url) return {};
+            
+            const response = await fetch(url);
+            if (!response.ok) return {};
+            
+            const data = await response.json();
+            return data.broadcasters || {};
+        } catch (error) {
+            console.error('Error fetching broadcasters:', error);
+            return {};
+        }
+    }
+
+    createMatchKey(homeTeam, awayTeam) {
+        // Normalize team names for matching
+        const normalize = (name) => name
+            .toLowerCase()
+            .replace(/\s+/g, '')
+            .replace(/[.-]/g, '');
+        
+        return `${normalize(homeTeam)}-${normalize(awayTeam)}`;
+    }
+
+    formatMatch(apiMatch, broadcasterMap = {}) {
+        const homeTeam = apiMatch.teams.home.name;
+        const awayTeam = apiMatch.teams.away.name;
+        const matchKey = this.createMatchKey(homeTeam, awayTeam);
+        
+        // Get broadcaster from map if available
+        const broadcasterInfo = broadcasterMap[matchKey];
+        
         return {
             id: apiMatch.fixture.id,
             competition: apiMatch.league.name,
-            homeTeam: apiMatch.teams.home.name,
-            awayTeam: apiMatch.teams.away.name,
+            homeTeam,
+            awayTeam,
             homeLogo: apiMatch.teams.home.logo,
             awayLogo: apiMatch.teams.away.logo,
             homeScore: apiMatch.goals.home,
@@ -190,7 +231,8 @@ class FootballAPI {
             statusLong: apiMatch.fixture.status.long,
             datetime: apiMatch.fixture.date,
             venue: apiMatch.fixture.venue.name,
-            elapsed: apiMatch.fixture.status.elapsed
+            elapsed: apiMatch.fixture.status.elapsed,
+            broadcaster: broadcasterInfo?.broadcaster || null
         };
     }
 
