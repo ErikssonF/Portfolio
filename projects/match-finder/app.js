@@ -544,6 +544,7 @@ function getBroadcasterUrl(broadcaster, competition) {
         },
         'TNT Sports': {
             'UEFA Champions League': 'https://www.discoveryplus.com/gb/show/uefa-champions-league',
+            'UEFA Europa League': 'https://www.discoveryplus.com/gb/show/uefa-europa-league',
             'Premier League': 'https://www.discoveryplus.com/gb/sport',
             'FA Cup': 'https://www.discoveryplus.com/gb/sport',
             'Carabao Cup': 'https://www.discoveryplus.com/gb/sport'
@@ -551,11 +552,13 @@ function getBroadcasterUrl(broadcaster, competition) {
         'Sky Sports': {
             'Premier League': 'https://www.skysports.com/watch/premier-league-live-on-sky',
             'UEFA Champions League': 'https://www.skysports.com/watch',
+            'UEFA Europa League': 'https://www.skysports.com/watch',
             'FA Cup': 'https://www.skysports.com/watch/fa-cup',
             'Carabao Cup': 'https://www.skysports.com/watch'
         },
         'Discovery+': {
             'UEFA Champions League': 'https://www.discoveryplus.com/gb/show/uefa-champions-league',
+            'UEFA Europa League': 'https://www.discoveryplus.com/gb/show/uefa-europa-league',
             'Premier League': 'https://www.discoveryplus.com/gb/sport'
         },
         'ITV': {
