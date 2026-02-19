@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swedish Finance News</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(120deg, #f6f7f8 0%, #eef1f3 50%, #f6f7f8 100%);
+            padding: 20px;
+            min-height: 100vh;
+            color: #1f2933;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 14px 40px rgba(17, 24, 39, 0.08);
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid #e6eaee;
+        }
+        .header h1 {
+            color: #0f172a;
+            font-size: 2.4em;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+        .header .date {
+            color: #6b7280;
+            font-size: 1.05em;
+        }
+        .news-section {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+            margin-bottom: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid #e6eaee;
+        }
+        .news-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+        }
+        .news-section h2 {
+            color: #111827;
+            font-size: 1.7em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #cfd6de;
+            letter-spacing: -0.2px;
+        }
+        .news-section .source-link {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .news-section .source-link:hover {
+            text-decoration: underline;
+        }
+        .news-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #e8ecf0;
+            color: #374151;
+            line-height: 1.6;
+        }
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        .news-item:before {
+            content: "• ";
+            color: #9ca3af;
+        }
+        .news-item a {
+            color: #0f172a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .news-item a:hover {
+            text-decoration: underline;
+        }
+        .news-indicator {
+            display: inline-block;
+            margin-left: 8px;
+            font-weight: bold;
+        }
+        .rising {
+            color: #22863a;
+        }
+        .falling {
+            color: #cb2431;
+        }
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+        .refresh-btn {
+            background: #111827;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 24px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .refresh-btn:hover {
+            background: #1f2937;
+            transform: translateY(-1px);
+        }
+        .news-columns {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .news-column {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e6eaee;
+        }
+        .news-column h4 {
+            color: #111827;
+            font-size: 1em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #d5dbe3;
+            letter-spacing: -0.1px;
+        }
+        .news-column .news-item {
+            padding: 8px 0;
+            font-size: 0.95em;
+        }
+        .news-column .news-item:before {
+            content: "› ";
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📰 Swedish Finance News</h1>
+            <div class="date">2026-01-15 21:15:00</div>
+            <button class="refresh-btn" onclick="location.reload()">🔄 Refresh</button>
+        </div>
+        <div class="news-section">
+            <h2>Dagens Industri</h2>
+            <a href="https://www.di.se" target="_blank" class="source-link">🔗 Visit source</a>
+            <div class="news-item"><a href="https://www.di.se/nyheter/paretos-toppval-har-ser-analyshuset-storst-uppsida/" target="_blank">Paretos toppval – här ser analyshuset störst uppsida</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.di.se/live/klart-taiwan-investerar-2-300-miljarder-i-usa/" target="_blank">Klart: Taiwan investerar 2.300 miljarder i USA</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.di.se/nyheter/usa-star-fast-ska-ta-over-gronland/" target="_blank">USA står fast – ska ta över Grönland</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.di.se/nyheter/forsvarstoppen-nobbar-s-forslag-om-multinationell-styrka-pa-gotland/" target="_blank">Försvarstoppen nobbar S-förslag om multinationell styrka på Gotland</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.di.se/nyheter/banktoppen-sa-kan-europa-ta-efter-usa/" target="_blank">Banktoppen: Så kan Europa ta efter USA</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.di.se/live/omsattningen-okar-snabbt-for-oncopeptides/" target="_blank">Omsättningen ökar snabbt för Oncopeptides</a> <span class="news-indicator"></span></div>
+        </div>
+        <div class="news-section">
+            <h2>Avanza</h2>
+            <a href="https://www.avanza.se/marknadsoversikt.html" target="_blank" class="source-link">🔗 Visit source</a>
+            <div class="news-item"><a href="https://www.avanza.se/borsen-idag.html" target="_blank">📊 Börsen idag – Aktiekurser och marknadsöversikt</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/usa-nar-handelsavtal-med-taiwan-med-fokus-pa-halvledare-20260115" target="_blank">Når handelsavtal med taiwan med fokus på halvledare</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/ravaror-olja-kraftigt-ned-efter-trumps-besked-om-iran-tabell-20260115" target="_blank">Olja kraftigt ned efter trumps besked om iran- tabell</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/ncab-pareto-hojer-rekommendationen-till-kop-behall-20260115" target="_blank">Pareto höjer rekommendationen till köp (behåll)</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/new-york-fortsatt-upp-eli-lilly-mot-strommen-s-p-500-0-7-20260115" target="_blank">Fortsatt upp, eli lilly mot strömmen, s&p 500 +0,7 %</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/oncopeptides-nettoomsattning-18-6-mln-kr-4-kv-20260115" target="_blank">Nettoomsättning 18,6 mln kr 4 kv</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/fastator-emission-fulltecknad-aktiekapital-okar-med-84-mln-kr-20260115" target="_blank">Emission fulltecknad, aktiekapital ökar med 84 mln kr</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/fed-doj-utredning-utgor-hot-mot-feds-oberoende-barr-20260115" target="_blank">Doj-utredning utgör hot mot feds oberoende - barr</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.placera.se/telegram/fordon-ford-i-samtal-med-byd-om-batteriavtal-20260115" target="_blank">Ford i samtal med byd om batteriavtal</a> <span class="news-indicator"></span></div>
+        </div>
+        <div class="news-section">
+            <h2>Aftonbladet Ekonomi</h2>
+            <a href="https://www.aftonbladet.se/ekonomi" target="_blank" class="source-link">🔗 Visit source</a>
+            <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/a/zO5onK/5-fallor-som-hindrar-kvinnor-fran-borsen?utm_medium=rss" target="_blank">5 fällor som stoppar kvinnor från börsen</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/pension/a/wrPw8P/darfor-ska-du-halla-koll-pa-ppm-fonderna-hela-vagen?utm_medium=rss" target="_blank">Därför ska du hålla koll på fonderna – livet ut</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/pension/a/8q0EeE/ga-i-pension-vid-62-med-nya-regelandringen?utm_medium=rss" target="_blank">Så går du i pension vid 62 med regeländringen</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/a/j0BkPe/venezuelas-problemolja-tjock-dyr-och-smutsig?utm_medium=rss" target="_blank">Venezuelas problemolja – tjock, dyr och smutsig</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/a/ExpKAj/kronofodgen-salde-familjens-hus-nu-ska-de-atta-barnen-vrakas?utm_medium=rss" target="_blank">Åttabarnsfamilj ska vräkas: ”Då slås vi i spillror”</a> <span class="news-indicator"></span></div>
+            <div class="news-item"><a href="https://www.aftonbladet.se/minekonomi/a/wre0GG/bluesteps-svar-om-de-hoga-rantorna-pa-bolanen?utm_medium=rss" target="_blank">”Våra räntor skiljer sig inte så mycket”</a> <span class="news-indicator"></span></div>
+        </div>
+        <div class="news-section">
+            <h2>Sveriges Riksbank</h2>
+            <a href="https://www.riksbank.se/sv/press-och-publicerat/" target="_blank" class="source-link">🔗 Visit source</a>
+        <div class="news-columns">
+            <div class="news-column">
+                <h4>Riksbanken</h4>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2026/riksbanken-valkomnar-finansutskottets-utvardering-av-penningpolitiken/" target="_blank">2026-01-14 Nyhet Riksbanken välkomnar finansutskottets utvärdering av penningpolitiken</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2026/ingen-avsattning-for-finansiella-risker-2025/" target="_blank">2026-01-09 Nyhet Ingen avsättning för finansiella risker 2025</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2025/riksbankens-kalender-uppdaterad-for-perioden-junidecember-2026/" target="_blank">2025-12-08 Nyhet Riksbankens kalender uppdaterad för perioden juni–december 2026</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2025/thedeen-centralbanker-maste-hela-tiden-fortjana-sitt-oberoende/" target="_blank">2025-12-01 Nyhet Thedéen: Centralbanker måste hela tiden förtjäna sitt oberoende</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2025/anna-sjulander-ny-chef-for-avdelningen-for-marknader/" target="_blank">2025-11-18 Nyhet Anna Sjulander ny chef för avdelningen för marknader</a></div>
+            </div>
+            <div class="news-column">
+                <h4>Betalningar & kontanter</h4>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2026/europeiska-motsvarigheter-till-swish-vill-mojliggora-betalningar-over-landsgranserna/" target="_blank">2026-01-13 Nyhet, Staff memo Europeiska motsvarigheter till Swish vill möjliggöra betalningar över landsgränserna</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2025/sverige-ligger-efter-resten-av-norden-med-tjanster-for-omedelbara-betalningar/" target="_blank">2025-12-11 Nyhet Sverige ligger efter resten av Norden med tjänster för omedelbara betalningar</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2025/internationellt-samarbete-kravs-for-att-hantera-riskerna-med-stablecoins/" target="_blank">2025-11-11 Nyhet, Staff memo Internationellt samarbete krävs för att hantera riskerna med stablecoins</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2025/samverkan-med-finansinspektionen-om-den-kontracykliska-kapitalbufferten2/" target="_blank">2025-10-23 Nyhet Samverkan med Finansinspektionen om den kontracykliska kapitalbufferten</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/pressmeddelanden/2025/riksbankens-remissvar-angaende-promemorian-utveckling-av-makrotillsynsomradet/" target="_blank">2025-10-16 Pressmeddelande, Remissvar Riksbankens remissvar angående promemorian ”Utveckling av makrotillsynsområdet”</a></div>
+            </div>
+            <div class="news-column">
+                <h4>Penningpolitik</h4>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2026/riksbanken-valkomnar-finansutskottets-utvardering-av-penningpolitiken/" target="_blank">2026-01-14 Nyhet Riksbanken välkomnar finansutskottets utvärdering av penningpolitiken</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/pressmeddelanden/2025/protokoll-fran-det-penningpolitiska-motet-den-17-december-2025/" target="_blank">2025-12-30 Pressmeddelande, Protokoll Protokoll från det penningpolitiska mötet den 17 december 2025</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/pressmeddelanden/2025/styrrantan-oforandrad-pa-175-procent2/" target="_blank">2025-12-18 Pressmeddelande Styrräntan oförändrad på 1,75 procent</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2025/riksbankens-kalender-uppdaterad-for-perioden-junidecember-2026/" target="_blank">2025-12-08 Nyhet Riksbankens kalender uppdaterad för perioden juni–december 2026</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/pressmeddelanden/2025/protokoll-fran-det-penningpolitiska-motet-den-4-november-2025/" target="_blank">2025-11-11 Pressmeddelande, Protokoll Protokoll från det penningpolitiska mötet den 4 november 2025</a></div>
+            </div>
+            <div class="news-column">
+                <h4>Finansiell stabilitet</h4>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2025/bankerna-har-laga-kreditforluster-fran-foretagskonkurser/" target="_blank">2025-12-22 Nyhet, Ekonomisk kommentar Bankerna har låga kreditförluster från företagskonkurser</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2025/protokoll-fran-finansiella-stabilitetsradets-mote-28-november-2025/" target="_blank">2025-12-11 Nyhet Protokoll från Finansiella stabilitetsrådets möte 28 november 2025</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2025/sverige-ligger-efter-resten-av-norden-med-tjanster-for-omedelbara-betalningar/" target="_blank">2025-12-11 Nyhet Sverige ligger efter resten av Norden med tjänster för omedelbara betalningar</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2025/riksbankens-kalender-uppdaterad-for-perioden-junidecember-2026/" target="_blank">2025-12-08 Nyhet Riksbankens kalender uppdaterad för perioden juni–december 2026</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/pressmeddelanden/2025/stabilitetsriskerna-kvarstar-i-en-osaker-omvarld/" target="_blank">2025-11-13 Pressmeddelande Stabilitetsriskerna kvarstår i en osäker omvärld</a></div>
+            </div>
+            <div class="news-column">
+                <h4>Marknader</h4>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2026/europeiska-motsvarigheter-till-swish-vill-mojliggora-betalningar-over-landsgranserna/" target="_blank">2026-01-13 Nyhet, Staff memo Europeiska motsvarigheter till Swish vill möjliggöra betalningar över landsgränserna</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2026/ingen-avsattning-for-finansiella-risker-2025/" target="_blank">2026-01-09 Nyhet Ingen avsättning för finansiella risker 2025</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/nyheter/2025/referensrantan-faststalld-till-200-procent2/" target="_blank">2025-12-30 Nyhet Referensräntan fastställd till 2,00 procent</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/pressmeddelanden/2025/protokoll-fran-det-penningpolitiska-motet-den-17-december-2025/" target="_blank">2025-12-30 Pressmeddelande, Protokoll Protokoll från det penningpolitiska mötet den 17 december 2025</a></div>
+                <div class="news-item"><a href="https://www.riksbank.se/sv/press-och-publicerat/nyheter-och-pressmeddelanden/pressmeddelanden/2025/styrrantan-oforandrad-pa-175-procent2/" target="_blank">2025-12-18 Pressmeddelande Styrräntan oförändrad på 1,75 procent</a></div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>Finance News Aggregator • Auto-generated report</p>
+            <p>Sources: Dagens Industri, Avanza, Aftonbladet, Sveriges Riksbank</p>
+            <p style="font-size: 0.85em; margin-top: 10px; opacity: 0.8;">
+                Note: Some sources use JavaScript for content loading. If headlines aren't available, 
+                sample data or key metrics are displayed. Visit the source websites for latest updates.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
