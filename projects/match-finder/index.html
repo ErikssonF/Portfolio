@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Finder</title>
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>⚽ Match Finder</h1>
+            <p class="subtitle">Find your football matches across streaming services</p>
+        </header>
+
+        <div class="filters">
+            <button class="filter-btn active" data-filter="today">Today</button>
+            <button class="filter-btn" data-filter="tomorrow">Tomorrow</button>
+            <button class="filter-btn" data-filter="thisweek">This Week</button>
+        </div>
+
+        <div class="api-notice">
+            <p id="apiNoticeText">⚠️ To use this app locally, you need a free API key from <a href="https://dashboard.api-football.com" target="_blank">API-Football Dashboard</a></p>
+            <p style="font-size: 0.9em; margin-top: 10px;" id="apiNoticeSubtext">Free tier: 100 requests/day. Get your key at the official dashboard.</p>
+            <div class="api-key-input" id="apiKeyInput">
+                <input type="text" id="apiKey" placeholder="Enter your API key here">
+                <button id="saveApiKey">Save Key</button>
+            </div>
+            <div id="rateLimitInfo" style="margin-top: 15px; display: none;">
+                <p style="color: #10b981;">✅ API Key saved! Requests remaining today: <strong id="requestsRemaining">100</strong>/100</p>
+            </div>
+        </div>
+
+        <div id="loadingState" class="loading">
+            <div class="spinner"></div>
+            <p>Loading matches...</p>
+        </div>
+
+        <div id="errorState" class="error-message" style="display: none;">
+            <p>⚠️ <span id="errorText"></span></p>
+        </div>
+
+        <div id="matchList" class="match-list">
+            <!-- Matches will be dynamically inserted here -->
+        </div>
+
+        <footer class="app-footer">
+            <div class="footer-status">
+                <div class="status-item">
+                    <span class="status-label">🔄 Cache:</span>
+                    <span id="cacheStatus" class="status-value">Active (5 min)</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">📡 API Calls:</span>
+                    <span id="apiCallCount" class="status-value">0 today</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">⏱️ Last update:</span>
+                    <span id="lastUpdate" class="status-value">--:--</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
