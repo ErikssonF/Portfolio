@@ -57,6 +57,7 @@ function createMatchKey(homeTeam, awayTeam) {
   // Normalize team names for matching
   const normalize = (name) => name
     .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove diacritics (ç -> c, etc.)
     .replace(/\s+/g, '')
     .replace(/[.-\/]/g, '');  // Also remove slashes
   
