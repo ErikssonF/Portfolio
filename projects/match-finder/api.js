@@ -158,22 +158,23 @@ class FootballAPI {
         const today = new Date().toISOString().split('T')[0];
         
         // Fetch football, NFL games, and broadcaster info in parallel
-        const [footballMatches, nflGames, plBroadcasters, clBroadcasters, faCupBroadcasters, carabaoBroadcasters] = await Promise.all([
+        const [footballMatches, nflGames, plBroadcasters, clBroadcasters, elBroadcasters, faCupBroadcasters, carabaoBroadcasters] = await Promise.all([
             this.makeRequest(`/fixtures?date=${today}`),
             this.makeRequest(`/nfl/games?date=${today}`),
             this.getBroadcasters('Premier League', today),
             this.getBroadcasters('UEFA Champions League', today),
+            this.getBroadcasters('UEFA Europa League', today),
             this.getBroadcasters('FA Cup', today),
             this.getBroadcasters('Carabao Cup', today)
         ]);
         
         // Combine broadcaster data
-        const broadcasterMap = { ...plBroadcasters, ...clBroadcasters, ...faCupBroadcasters, ...carabaoBroadcasters };
+        const broadcasterMap = { ...plBroadcasters, ...clBroadcasters, ...elBroadcasters, ...faCupBroadcasters, ...carabaoBroadcasters };
         
-        // Filter football for Premier League (39), Champions League (2), FA Cup (45), Carabao Cup (48)
+        // Filter football for Premier League (39), Champions League (2), Europa League (3), FA Cup (45), Carabao Cup (48)
         const filteredFootball = (footballMatches.response || []).filter(match => {
             const leagueId = match.league?.id;
-            return leagueId === 39 || leagueId === 2 || leagueId === 45 || leagueId === 48;
+            return leagueId === 39 || leagueId === 2 || leagueId === 3 || leagueId === 45 || leagueId === 48;
         });
         
         // Format and combine all matches with broadcaster info

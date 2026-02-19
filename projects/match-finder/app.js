@@ -103,6 +103,9 @@ async function loadMatches() {
             case 'tomorrow':
                 matches = await getTomorrowsMatches();
                 break;
+            case 'thisweek':
+                matches = await getThisWeeksMatches();
+                break;
             default:
                 // Default to today
                 matches = await api.getTodaysMatches();
@@ -137,15 +140,59 @@ async function getTomorrowsMatches() {
         api.makeRequest(`/nfl/games?date=${tomorrowDate}`)
     ]);
     
-    // Filter for PL & CL
+    // Filter for PL, CL, EL, FA Cup, Carabao Cup
     const filteredFootball = (footballMatches.response || []).filter(match => {
         const leagueId = match.league?.id;
-        return leagueId === 39 || leagueId === 2;
+        return leagueId === 39 || leagueId === 2 || leagueId === 3 || leagueId === 45 || leagueId === 48;
     });
     
     // Format and combine
     const formattedFootball = filteredFootball.map(m => api.formatMatch(m));
     const formattedNFL = (nflGames.response || []).map(g => api.formatNFLGame(g));
+    
+    return [...formattedFootball, ...formattedNFL];
+}
+
+// Get this week's matches
+async function getThisWeeksMatches() {
+    const today = new Date();
+    const weekEnd = new Date();
+    weekEnd.setDate(today.getDate() + 7);
+    
+    // Generate array of dates for the next 7 days
+    const dates = [];
+    for (let i = 0; i < 7; i++) {
+        const date = new Date();
+        date.setDate(today.getDate() + i);
+        dates.push(date.toISOString().split('T')[0]);
+    }
+    
+    // Fetch matches for each date in parallel
+    const allPromises = dates.flatMap(date => [
+        api.makeRequest(`/fixtures?date=${date}`),
+        api.makeRequest(`/nfl/games?date=${date}`)
+    ]);
+    
+    const results = await Promise.all(allPromises);
+    
+    // Separate football and NFL results
+    const allFootballMatches = [];
+    const allNflGames = [];
+    
+    for (let i = 0; i < results.length; i += 2) {
+        allFootballMatches.push(...(results[i].response || []));
+        allNflGames.push(...(results[i + 1].response || []));
+    }
+    
+    // Filter for PL, CL, EL, FA Cup, Carabao Cup
+    const filteredFootball = allFootballMatches.filter(match => {
+        const leagueId = match.league?.id;
+        return leagueId === 39 || leagueId === 2 || leagueId === 3 || leagueId === 45 || leagueId === 48;
+    });
+    
+    // Format and combine
+    const formattedFootball = filteredFootball.map(m => api.formatMatch(m));
+    const formattedNFL = allNflGames.map(g => api.formatNFLGame(g));
     
     return [...formattedFootball, ...formattedNFL];
 }
