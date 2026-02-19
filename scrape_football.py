@@ -193,7 +193,7 @@ print(f"\n{'='*60}")
 print("THIS WEEK'S GAMES")
 print(f"{'='*60}")
 
-today = datetime.now()
+today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 week_end = today + timedelta(days=7)
 
 this_week_games = [
