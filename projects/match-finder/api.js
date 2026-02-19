@@ -157,10 +157,11 @@ class FootballAPI {
     async getTodaysMatches() {
         const today = new Date().toISOString().split('T')[0];
         
-        // Fetch football, NFL games, and broadcaster info in parallel
-        const [footballMatches, nflGames, plBroadcasters, clBroadcasters, elBroadcasters, faCupBroadcasters, carabaoBroadcasters] = await Promise.all([
+        // Fetch football, NFL games, broadcaster info, and Svenska Cupen in parallel
+        const [footballMatches, nflGames, svenskaCupenMatches, plBroadcasters, clBroadcasters, elBroadcasters, faCupBroadcasters, carabaoBroadcasters] = await Promise.all([
             this.makeRequest(`/fixtures?date=${today}`),
             this.makeRequest(`/nfl/games?date=${today}`),
+            this.getSvenskaCupenMatches(today),
             this.getBroadcasters('Premier League', today),
             this.getBroadcasters('UEFA Champions League', today),
             this.getBroadcasters('UEFA Europa League', today),
@@ -181,7 +182,26 @@ class FootballAPI {
         const formattedFootball = filteredFootball.map(m => this.formatMatch(m, broadcasterMap));
         const formattedNFL = (nflGames.response || []).map(g => this.formatNFLGame(g));
         
-        return [...formattedFootball, ...formattedNFL];
+        return [...formattedFootball, ...formattedNFL, ...svenskaCupenMatches];
+    }
+
+    async getSvenskaCupenMatches(date) {
+        try {
+            const url = this.useNetlifyFunction
+                ? `/.netlify/functions/svenska-cupen-scraper?date=${date}`
+                : null;
+            
+            if (!url) return [];
+            
+            const response = await fetch(url);
+            if (!response.ok) return [];
+            
+            const data = await response.json();
+            return data.matches || [];
+        } catch (error) {
+            console.error('Error fetching Svenska Cupen matches:', error);
+            return [];
+        }
     }
 
     async getBroadcasters(competition, date) {

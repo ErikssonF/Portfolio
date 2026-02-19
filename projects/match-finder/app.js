@@ -134,10 +134,11 @@ async function getTomorrowsMatches() {
     tomorrow.setDate(tomorrow.getDate() + 1);
     const tomorrowDate = tomorrow.toISOString().split('T')[0];
     
-    // Fetch both football and NFL games in parallel
-    const [footballMatches, nflGames] = await Promise.all([
+    // Fetch football, NFL games, and Svenska Cupen in parallel
+    const [footballMatches, nflGames, svenskaCupenMatches] = await Promise.all([
         api.makeRequest(`/fixtures?date=${tomorrowDate}`),
-        api.makeRequest(`/nfl/games?date=${tomorrowDate}`)
+        api.makeRequest(`/nfl/games?date=${tomorrowDate}`),
+        api.getSvenskaCupenMatches(tomorrowDate)
     ]);
     
     // Filter for PL, CL, EL, FA Cup, Carabao Cup
@@ -150,7 +151,7 @@ async function getTomorrowsMatches() {
     const formattedFootball = filteredFootball.map(m => api.formatMatch(m));
     const formattedNFL = (nflGames.response || []).map(g => api.formatNFLGame(g));
     
-    return [...formattedFootball, ...formattedNFL];
+    return [...formattedFootball, ...formattedNFL, ...svenskaCupenMatches];
 }
 
 // Get this week's matches
@@ -167,21 +168,24 @@ async function getThisWeeksMatches() {
         dates.push(date.toISOString().split('T')[0]);
     }
     
-    // Fetch matches for each date in parallel
+    // Fetch matches for each date in parallel (football, NFL, and Svenska Cupen)
     const allPromises = dates.flatMap(date => [
         api.makeRequest(`/fixtures?date=${date}`),
-        api.makeRequest(`/nfl/games?date=${date}`)
+        api.makeRequest(`/nfl/games?date=${date}`),
+        api.getSvenskaCupenMatches(date)
     ]);
     
     const results = await Promise.all(allPromises);
     
-    // Separate football and NFL results
+    // Separate football, NFL, and Svenska Cupen results
     const allFootballMatches = [];
     const allNflGames = [];
+    const allSvenskaCupenMatches = [];
     
-    for (let i = 0; i < results.length; i += 2) {
+    for (let i = 0; i < results.length; i += 3) {
         allFootballMatches.push(...(results[i].response || []));
         allNflGames.push(...(results[i + 1].response || []));
+        allSvenskaCupenMatches.push(...(results[i + 2] || []));
     }
     
     // Filter for PL, CL, EL, FA Cup, Carabao Cup
@@ -194,7 +198,7 @@ async function getThisWeeksMatches() {
     const formattedFootball = filteredFootball.map(m => api.formatMatch(m));
     const formattedNFL = allNflGames.map(g => api.formatNFLGame(g));
     
-    return [...formattedFootball, ...formattedNFL];
+    return [...formattedFootball, ...formattedNFL, ...allSvenskaCupenMatches];
 }
 
 function displayMatches(matches) {
