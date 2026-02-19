@@ -92,6 +92,7 @@ function mapBroadcasterName(channelText) {
 async function scrapeBroadcasters(competition, date) {
   const competitionUrls = {
     'UEFA Champions League': 'https://www.wheresthematch.com/live-champions-league-football-on-tv/',
+    'UEFA Europa League': 'https://www.wheresthematch.com/live-europa-league-football-on-tv/',
     'FA Cup': 'https://www.wheresthematch.com/live-fa-cup-football-on-tv/',
     'Carabao Cup': 'https://www.wheresthematch.com/carabao-cup-on-tv/'
   };
