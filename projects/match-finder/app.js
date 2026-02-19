@@ -524,42 +524,47 @@ function getBroadcasterUrl(broadcaster, competition) {
     const broadcasterUrls = {
         'Viaplay': {
             'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
-            'UEFA Champions League': 'https://viaplay.se/sport/fotboll/uefa-champions-league'
+            'UEFA Champions League': 'https://viaplay.se/sport/fotboll/uefa-champions-league',
+            'UEFA Europa League': 'https://viaplay.se/sport/fotboll/uefa-europa-league'
         },
         'C More': {
             'UEFA Champions League': 'https://www.cmore.se/fotboll/uefa-champions-league',
+            'UEFA Europa League': 'https://www.cmore.se/fotboll/uefa-europa-league',
             'Premier League': 'https://www.cmore.se/sport/fotboll'
         },
         'Prime Video': {
             'Premier League': 'https://www.primevideo.com/region/eu/storefront/sports',
-            'UEFA Champions League': 'https://www.primevideo.com/region/eu/storefront/sports'
+            'UEFA Champions League': 'https://www.primevideo.com/region/eu/storefront/sports',
+            'UEFA Europa League': 'https://www.primevideo.com/region/eu/storefront/sports'
         },
         'Max': {
             'Premier League': 'https://www.max.com/se/sv/sports',
-            'UEFA Champions League': 'https://www.max.com/se/sv/sports'
+            'UEFA Champions League': 'https://www.max.com/se/sv/sports',
+            'UEFA Europa League': 'https://www.max.com/se/sv/sports'
         },
         'TV4': {
             'UEFA Champions League': 'https://www.tv4play.se/sport',
+            'UEFA Europa League': 'https://www.tv4play.se/sport',
             'Premier League': 'https://www.tv4play.se/sport'
         },
         'TNT Sports': {
-            'UEFA Champions League': 'https://www.discoveryplus.com/gb/show/uefa-champions-league',
-            'UEFA Europa League': 'https://www.discoveryplus.com/gb/show/uefa-europa-league',
-            'Premier League': 'https://www.discoveryplus.com/gb/sport',
-            'FA Cup': 'https://www.discoveryplus.com/gb/sport',
-            'Carabao Cup': 'https://www.discoveryplus.com/gb/sport'
+            'UEFA Champions League': 'https://viaplay.se/sport/fotboll/uefa-champions-league',
+            'UEFA Europa League': 'https://viaplay.se/sport/fotboll/uefa-europa-league',
+            'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
+            'FA Cup': 'https://viaplay.se/sport/fotboll',
+            'Carabao Cup': 'https://viaplay.se/sport/fotboll'
         },
         'Sky Sports': {
-            'Premier League': 'https://www.skysports.com/watch/premier-league-live-on-sky',
-            'UEFA Champions League': 'https://www.skysports.com/watch',
-            'UEFA Europa League': 'https://www.skysports.com/watch',
-            'FA Cup': 'https://www.skysports.com/watch/fa-cup',
-            'Carabao Cup': 'https://www.skysports.com/watch'
+            'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
+            'UEFA Champions League': 'https://viaplay.se/sport/fotboll/uefa-champions-league',
+            'UEFA Europa League': 'https://viaplay.se/sport/fotboll/uefa-europa-league',
+            'FA Cup': 'https://viaplay.se/sport/fotboll',
+            'Carabao Cup': 'https://viaplay.se/sport/fotboll'
         },
         'Discovery+': {
-            'UEFA Champions League': 'https://www.discoveryplus.com/gb/show/uefa-champions-league',
-            'UEFA Europa League': 'https://www.discoveryplus.com/gb/show/uefa-europa-league',
-            'Premier League': 'https://www.discoveryplus.com/gb/sport'
+            'UEFA Champions League': 'https://viaplay.se/sport/fotboll/uefa-champions-league',
+            'UEFA Europa League': 'https://viaplay.se/sport/fotboll/uefa-europa-league',
+            'Premier League': 'https://viaplay.se/sport/fotboll/premier-league'
         },
         'ITV': {
             'FA Cup': 'https://www.itv.com/watch/sport',
