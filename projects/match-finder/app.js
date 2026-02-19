@@ -323,7 +323,7 @@ function groupMatchesByBroadcaster(matches) {
     });
     
     // Sort groups by competition priority
-    const competitionOrder = ['Premier League', 'UEFA Champions League', 'FA Cup', 'Carabao Cup', 'NFL'];
+    const competitionOrder = ['Premier League', 'UEFA Champions League', 'UEFA Europa League', 'FA Cup', 'Carabao Cup', 'Svenska Cupen', 'NFL'];
     const sorted = {};
     
     competitionOrder.forEach(comp => {
