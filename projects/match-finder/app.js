@@ -525,31 +525,31 @@ function getBroadcasterUrl(broadcaster, competition) {
         'Viaplay': {
             'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
             'UEFA Champions League': 'https://viaplay.se/sport/fotboll/uefa-champions-league',
-            'UEFA Europa League': 'https://viaplay.se/sport/fotboll/uefa-europa-league'
+            'UEFA Europa League': 'https://www.disneyplus.com/en-gb/browse/'
         },
         'C More': {
             'UEFA Champions League': 'https://www.cmore.se/fotboll/uefa-champions-league',
-            'UEFA Europa League': 'https://www.cmore.se/fotboll/uefa-europa-league',
+            'UEFA Europa League': 'https://www.disneyplus.com/en-gb/browse/',
             'Premier League': 'https://www.cmore.se/sport/fotboll'
         },
         'Prime Video': {
             'Premier League': 'https://www.primevideo.com/region/eu/storefront/sports',
             'UEFA Champions League': 'https://www.primevideo.com/region/eu/storefront/sports',
-            'UEFA Europa League': 'https://www.primevideo.com/region/eu/storefront/sports'
+            'UEFA Europa League': 'https://www.disneyplus.com/en-gb/browse/'
         },
         'Max': {
             'Premier League': 'https://www.max.com/se/sv/sports',
             'UEFA Champions League': 'https://www.max.com/se/sv/sports',
-            'UEFA Europa League': 'https://www.max.com/se/sv/sports'
+            'UEFA Europa League': 'https://www.disneyplus.com/en-gb/browse/'
         },
         'TV4': {
             'UEFA Champions League': 'https://www.tv4play.se/sport',
-            'UEFA Europa League': 'https://www.tv4play.se/sport',
+            'UEFA Europa League': 'https://www.disneyplus.com/en-gb/browse/',
             'Premier League': 'https://www.tv4play.se/sport'
         },
         'TNT Sports': {
             'UEFA Champions League': 'https://viaplay.se/sport/fotboll/uefa-champions-league',
-            'UEFA Europa League': 'https://viaplay.se/sport/fotboll/uefa-europa-league',
+            'UEFA Europa League': 'https://www.disneyplus.com/en-gb/browse/',
             'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
             'FA Cup': 'https://viaplay.se/sport/fotboll',
             'Carabao Cup': 'https://viaplay.se/sport/fotboll'
@@ -557,13 +557,13 @@ function getBroadcasterUrl(broadcaster, competition) {
         'Sky Sports': {
             'Premier League': 'https://viaplay.se/sport/fotboll/premier-league',
             'UEFA Champions League': 'https://viaplay.se/sport/fotboll/uefa-champions-league',
-            'UEFA Europa League': 'https://viaplay.se/sport/fotboll/uefa-europa-league',
+            'UEFA Europa League': 'https://www.disneyplus.com/en-gb/browse/',
             'FA Cup': 'https://viaplay.se/sport/fotboll',
             'Carabao Cup': 'https://viaplay.se/sport/fotboll'
         },
         'Discovery+': {
             'UEFA Champions League': 'https://viaplay.se/sport/fotboll/uefa-champions-league',
-            'UEFA Europa League': 'https://viaplay.se/sport/fotboll/uefa-europa-league',
+            'UEFA Europa League': 'https://www.disneyplus.com/en-gb/browse/',
             'Premier League': 'https://viaplay.se/sport/fotboll/premier-league'
         },
         'ITV': {
