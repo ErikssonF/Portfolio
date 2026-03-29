@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golf IDs</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="hero">
+        <a href="../../index.html" class="back-link">← Portfolio</a>
+        <div class="hero-icon">⛳</div>
+        <h1>Golf IDs</h1>
+        <p class="subtitle">Your mates' Golf IDs, always at hand</p>
+    </header>
+
+    <div class="container">
+        <div class="add-form card">
+            <h2>Add a mate</h2>
+            <div class="form-row">
+                <input type="text" id="input-name" placeholder="Name" autocomplete="off" />
+                <input type="text" id="input-golfid" placeholder="Golf ID" autocomplete="off" />
+                <button id="btn-add" class="btn">Add</button>
+            </div>
+            <p id="form-error" class="form-error hidden"></p>
+        </div>
+
+        <div class="search-row">
+            <input type="text" id="input-search" placeholder="🔍  Search by name or ID…" />
+        </div>
+
+        <ul id="mates-list" class="mates-list"></ul>
+
+        <p id="empty-state" class="empty-state hidden">No mates added yet. Add the first one above!</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
