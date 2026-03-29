@@ -225,64 +225,106 @@ body {
   color: #f87171;
 }
 
+.btn-icon.in-round {
+  border-color: #10b981;
+  color: #10b981;
+  background: rgba(16,185,129,0.1);
+}
+
 /* ── Copy feedback ── */
 .btn-icon.copied {
   border-color: #10b981;
   color: #10b981;
 }
 
-/* ── Clubs list ── */
-.clubs-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 4px;
+/* ── Round panel ── */
+.round-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #0f172a;
+  border-top: 2px solid #10b981;
+  padding: 14px 20px 20px;
+  z-index: 100;
+  box-shadow: 0 -8px 30px rgba(0,0,0,0.5);
 }
 
-.club-item {
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 14px;
-  padding: 14px 20px;
+.round-panel-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  margin-bottom: 12px;
 }
 
-.club-name {
-  font-weight: 600;
+.round-title {
+  font-weight: 700;
   font-size: 0.95rem;
+  color: #10b981;
+  letter-spacing: 0.02em;
+}
+
+.btn-clear {
+  background: none;
+  border: 1px solid #475569;
+  border-radius: 20px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-clear:hover {
+  border-color: #f87171;
+  color: #f87171;
+}
+
+.round-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.round-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.round-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.round-item-name {
+  font-size: 0.88rem;
+  font-weight: 600;
   color: #f1f5f9;
 }
 
-.club-actions {
+.round-item-id {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.round-item-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
-.btn-book {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #fff;
-  border: none;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s;
-  white-space: nowrap;
-}
-
-.btn-book:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16,185,129,0.4);
+/* Pad page bottom so content isn't hidden behind round panel */
+body.has-round {
+  padding-bottom: 220px;
 }
 
 .empty-state {
