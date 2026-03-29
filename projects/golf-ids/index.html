@@ -15,7 +15,23 @@
     </header>
 
     <div class="container">
+
+        <!-- Clubs section -->
         <div class="add-form card">
+            <h2>Clubs</h2>
+            <div class="form-row">
+                <input type="text" id="input-club-name" placeholder="Club name" autocomplete="off" />
+                <input type="url" id="input-club-url" placeholder="Booking URL" autocomplete="off" />
+                <button id="btn-add-club" class="btn">Add</button>
+            </div>
+            <p id="club-form-error" class="form-error hidden"></p>
+        </div>
+
+        <ul id="clubs-list" class="clubs-list"></ul>
+        <p id="clubs-empty-state" class="empty-state hidden">No clubs saved yet.</p>
+
+        <!-- Mates section -->
+        <div class="add-form card" style="margin-top: 28px;">
             <h2>Add a mate</h2>
             <div class="form-row">
                 <input type="text" id="input-name" placeholder="Name" autocomplete="off" />
